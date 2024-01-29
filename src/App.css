@@ -1,0 +1,5 @@
+/* DEBUG CLASS */
+.debug{
+    border: 1px solid green;
+    min-height: 150px;
+}
