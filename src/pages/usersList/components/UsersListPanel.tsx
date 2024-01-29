@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { TransitionGroup } from "react-transition-group";
 import { deleteUsersById } from "../../../service/users/users.api";
 import { useQueryClient } from "react-query";
+import useAlertsStore from "../../../shared/alerts/alertsStore";
 
 interface UsersData {
     page: number;
@@ -29,6 +30,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     const { t } = useTranslation();
     const { isLoading: deleteUserIsLoading, error: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
     const queryClient = useQueryClient();
+    const {addAlert} = useAlertsStore();
 
     function isUserSelected(userId: string) {
         return selectedUsersId.includes(userId);
@@ -49,7 +51,13 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     }
 
     async function deleteUsersSelected() {
+        addAlert(t("deletingSelectedUsers"), 'info');
         await mutateDeleteUser(selectedUsersId);
+        if(deleteUserIsError){
+            addAlert(t("selectedUsersDeletionError"), 'error');
+        }else{
+            addAlert(t("selectedUsersDeletedSuccess"), 'success');
+        }
         queryClient.invalidateQueries('users');
         queryClient.clear();
         setSelectedUsers([]);

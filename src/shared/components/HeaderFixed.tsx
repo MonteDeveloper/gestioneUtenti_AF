@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import useAlertsStore from '../alerts/alertsStore';
 
 interface PropsHeaderFixed {
     components: ReactElement[];
@@ -17,6 +18,11 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
     const location = useLocation();
     const pathParts = location.pathname.split('/');
     const page = pathParts[1];
+
+    const { addAlert } = useAlertsStore();
+    const handleButtonAlertClick = () => {
+        addAlert('Operazione completata con successo', 'success');
+    };
 
     const { t } = useTranslation();
 
@@ -48,6 +54,7 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
 
                     <Container>
                         <Stack direction={'row'} justifyContent={'space-between'} spacing={2} width={1}>
+                        {/* <button onClick={handleButtonAlertClick}>Alert</button> */}
                             {
                                 props.components.map((component, index) => (
                                     <React.Fragment key={index}>

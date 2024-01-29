@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from "react-i18next";
 import HeaderFixed from "../../shared/components/HeaderFixed";
 import { useQueryClient } from "react-query";
+import useAlertsStore from "../../shared/alerts/alertsStore";
 
 export function UserInfoPage() {
     const { id } = useParams();
@@ -15,6 +16,7 @@ export function UserInfoPage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
+    const {addAlert} = useAlertsStore();
 
     function formatDate(dateString: string) {
         const date = new Date(dateString);
@@ -34,13 +36,15 @@ export function UserInfoPage() {
     };
 
     async function deleteUser (idUser: string) {
-        try {
-            await mutateDeleteUser([idUser]);
-            queryClient.clear();
-            navigate('/');
-        } catch (error) {
-            console.log(error)
+        addAlert(`'${user?.email}': ${t("deletingUser")}`, 'info');
+        await mutateDeleteUser([idUser]);
+        if(deleteUserIsError){
+            addAlert(`'${user?.email}': ${t("userDeletionError")}`, 'error');
+        }else{
+            addAlert(`'${user?.email}': ${t("userDeletedSuccess")}`, 'success');
         }
+        queryClient.clear();
+        navigate('/');
     };
 
     return (
@@ -54,7 +58,7 @@ export function UserInfoPage() {
                 </Button>,
                 <Stack direction={'row'} spacing={2}>
                     <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={() => handleClickDeleteUser()} color="error">
-                        <Stack direction={'row'} alignItems={'center'} spacing={1}>handleClickDeleteUser
+                        <Stack direction={'row'} alignItems={'center'} spacing={1}>
                             <DeleteIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                             {
                                 deleteUserIsLoading ?

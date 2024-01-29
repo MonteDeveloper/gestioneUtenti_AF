@@ -8,6 +8,7 @@ import { createUser } from '../../service/users/users.api';
 import { User } from '../../models/user';
 import HeaderFixed from '../../shared/components/HeaderFixed';
 import { useQueryClient } from 'react-query';
+import useAlertsStore from '../../shared/alerts/alertsStore';
 
 interface FormData {
     firstName: string;
@@ -23,6 +24,7 @@ export function CreateNewUserPage() {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const queryClient = useQueryClient();
+    const {addAlert} = useAlertsStore();
 
     async function onSubmit(data: FormData) {
         const user: Partial<User> = {
@@ -33,11 +35,17 @@ export function CreateNewUserPage() {
             surname: data.lastName,
         }
         try {
+            addAlert(`'${user.email}': ${t("creatingUser")}`, 'info');
             await mutateCreateUser(user);
+            if(createUserIsError){
+                addAlert(`'${user.email}': ${t("userCreationError")}`, 'error');
+            }else{
+                addAlert(`'${user.email}': ${t("userCreatedSuccess")}`, 'success');
+            }
             queryClient.clear();
             navigate('/');
         } catch (error) {
-            console.log(error)
+            addAlert(`'${user.email}': ${t("userCreationError")}`, 'error');
         }
     };
 

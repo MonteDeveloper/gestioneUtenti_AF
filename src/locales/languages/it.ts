@@ -34,4 +34,13 @@ export const translation = {
     "noUsersFound": "Nessun utente trovato",
     "uknownError": "Errore sconosciuto, riprovare",
     "deleteLoading": "Eliminazione...",
+    "userCreatedSuccess": "Utente creato con successo",
+    "creatingUser": "Creazione dell'utente in corso...",
+    "userDeletedSuccess": "Utente eliminato con successo",
+    "deletingUser": "Eliminazione dell'utente in corso...",
+    "userCreationError": "Errore nella creazione dell'utente, riprovare",
+    "userDeletionError": "Errore nell'eliminazione dell'utente, riprovare",
+    "deletingSelectedUsers": "Eliminazione degli utenti selezionati in corso...",
+    "selectedUsersDeletedSuccess": "Utenti selezionati eliminati correttamente",
+    "selectedUsersDeletionError": "Errore nell'eliminazione degli utenti selezionati, riprovare",
 }
