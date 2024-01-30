@@ -26,7 +26,7 @@ const fetchUserById = async (id: string) => {
 
 const mutateDeleteUsersById = async (usersId: string[]) => {
   const deletePromises = usersId.map(async (id) => {
-    await pb.collection('usersDataT').delete(id);
+    await pb.collection('usersData').delete(id);
   });
 
   await Promise.all(deletePromises);

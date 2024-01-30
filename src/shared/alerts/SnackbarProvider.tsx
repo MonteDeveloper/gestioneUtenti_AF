@@ -26,7 +26,7 @@ export function SnackbarProvider({ children }: SnackbarProviderProps) {
                     open={true}
                     autoHideDuration={6000}
                     onClose={handleClose(alert.id)}
-                    style={{ position: 'absolute', bottom: `${index * 55}px`, left: 0, padding: 15 }}
+                    style={{ position: 'fixed', bottom: `${index * 55}px`, left: 0, padding: 15 }}
                 >
                     <Alert severity={alert.type} onClose={handleClose(alert.id)}>
                         {alert.message}
