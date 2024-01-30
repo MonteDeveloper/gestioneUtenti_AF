@@ -1,12 +1,12 @@
 
-import { useMutation, useQuery } from 'react-query';
+import { isError, useMutation, useQuery } from 'react-query';
 import { User } from '../../models/user';
 import { pb } from '../../pocketbase';
 
 // Funzioni di fetch
 const fetchUsers = async (currentPage: number, searchValue?: string) => {
   let query = pb.collection('usersData');
-  const itemPerPage: number = 7; 
+  const itemPerPage: number = 7;
 
   if (searchValue) {
     const users = await query.getList<User>(currentPage, itemPerPage, {
@@ -25,15 +25,11 @@ const fetchUserById = async (id: string) => {
 };
 
 const mutateDeleteUsersById = async (usersId: string[]) => {
-  try {
-      const deletePromises = usersId.map(async (id) => {
-          await pb.collection('usersData').delete(id);
-      });
+  const deletePromises = usersId.map(async (id) => {
+    await pb.collection('usersDataT').delete(id);
+  });
 
-      await Promise.all(deletePromises);
-  } catch (error) {
-      console.error('Errore durante l\'eliminazione degli utenti:', error);
-  }
+  await Promise.all(deletePromises);
 };
 
 const mutateCreateUser = async (user: Partial<User>) => {

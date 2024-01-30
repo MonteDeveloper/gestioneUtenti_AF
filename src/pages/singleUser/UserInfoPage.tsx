@@ -12,7 +12,7 @@ import useAlertsStore from "../../shared/alerts/alertsStore";
 export function UserInfoPage() {
     const { id } = useParams();
     const { data: user, isLoading: getUserIsLoading, error: getUserIsError } = getUserById(id!);
-    const { isLoading: deleteUserIsLoading, error: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
+    const { isLoading: deleteUserIsLoading, isError: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
     const navigate = useNavigate();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -37,14 +37,14 @@ export function UserInfoPage() {
 
     async function deleteUser (idUser: string) {
         addAlert(`'${user?.email}': ${t("deletingUser")}`, 'info');
-        await mutateDeleteUser([idUser]);
-        if(deleteUserIsError){
-            addAlert(`'${user?.email}': ${t("userDeletionError")}`, 'error');
-        }else{
+        try {
+            await mutateDeleteUser([idUser]);
             addAlert(`'${user?.email}': ${t("userDeletedSuccess")}`, 'success');
+            queryClient.clear();
+            navigate('/');
+        } catch (error) {
+            addAlert(`'${user?.email}': ${t("userDeletionError")}`, 'error');
         }
-        queryClient.clear();
-        navigate('/');
     };
 
     return (

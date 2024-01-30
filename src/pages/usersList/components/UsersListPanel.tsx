@@ -28,9 +28,9 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     const navigate = useNavigate();
     const [selectedUsersId, setSelectedUsers] = useState<string[]>([]);
     const { t } = useTranslation();
-    const { isLoading: deleteUserIsLoading, error: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
+    const { isLoading: deleteUserIsLoading, isError: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
     const queryClient = useQueryClient();
-    const {addAlert} = useAlertsStore();
+    const { addAlert } = useAlertsStore();
 
     function isUserSelected(userId: string) {
         return selectedUsersId.includes(userId);
@@ -52,14 +52,14 @@ export function UsersListPanel(props: PropsUsersListPanel) {
 
     async function deleteUsersSelected() {
         addAlert(t("deletingSelectedUsers"), 'info');
-        await mutateDeleteUser(selectedUsersId);
-        if(deleteUserIsError){
-            addAlert(t("selectedUsersDeletionError"), 'error');
-        }else{
+        try {
+            await mutateDeleteUser(selectedUsersId);
             addAlert(t("selectedUsersDeletedSuccess"), 'success');
+            queryClient.invalidateQueries('users');
+            queryClient.clear();
+        } catch (error) {
+            addAlert(t("selectedUsersDeletionError"), 'error');
         }
-        queryClient.invalidateQueries('users');
-        queryClient.clear();
         setSelectedUsers([]);
     }
 
@@ -158,9 +158,9 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                         <DeleteIcon sx={{ fontSize: 30, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                                         <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteUsersButton")}</Box>
                                     </>
-                                : <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteLoading")}</Box>
+                                    : <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteLoading")}</Box>
                             }
-                            
+
                         </Stack>
                     </Button>
                 </Fade >
@@ -169,7 +169,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                 props.usersRawData && props.usersRawData.items.length > 0 && selectedUsersId.length == 0 &&
                 <Box sx={{ position: 'fixed', bottom: 50, left: '50%', transform: 'translate(-50%, 0)' }}>
                     {/* PAGINATION */}
-                    <Fade in={selectedUsersId.length == 0}>
+                    <Fade in={selectedUsersId.length == 0 && props.usersRawData.totalPages > 1}>
                         <Paper elevation={0} sx={{ boxShadow: '0px 0px 13px 1px rgba(0,0,0,0.15)', p: 2, borderRadius: 3 }}>
                             <Pagination count={props.usersRawData.totalPages} page={props.usersRawData.page} onChange={handleChangePage} />
                         </Paper>
