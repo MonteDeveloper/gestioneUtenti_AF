@@ -52,15 +52,17 @@ export function UsersListPanel(props: PropsUsersListPanel) {
 
     async function deleteUsersSelected() {
         addAlert(t("deletingSelectedUsers"), 'info');
+        const selectedUsersSaved = [...selectedUsersId];
         try {
             await mutateDeleteUser(selectedUsersId);
             addAlert(t("selectedUsersDeletedSuccess"), 'success');
             queryClient.invalidateQueries('users');
             queryClient.clear();
+            setSelectedUsers([]);
         } catch (error) {
             addAlert(t("selectedUsersDeletionError"), 'error');
+            setSelectedUsers(selectedUsersSaved);
         }
-        setSelectedUsers([]);
     }
 
     function handleChangePage(event: React.ChangeEvent<unknown>, newPage: number) {
@@ -150,19 +152,26 @@ export function UsersListPanel(props: PropsUsersListPanel) {
             <Box sx={{ position: 'fixed', bottom: 50, left: '50%', transform: 'translate(-50%, 0)' }}>
                 {/* DELETE USERS BUTTON */}
                 <Fade in={selectedUsersId.length > 0 && props.usersRawData != undefined && props.usersRawData.items.length > 0}>
-                    <Button disabled={deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={() => deleteUsersSelected()} color="error">
-                        <Stack direction={'row'} alignItems={'center'} spacing={1}>
-                            {
-                                !deleteUserIsLoading ?
-                                    <>
-                                        <DeleteIcon sx={{ fontSize: 30, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                                        <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteUsersButton")}</Box>
-                                    </>
-                                    : <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteLoading")}</Box>
-                            }
+                    <Stack direction={'row'} spacing={2}>
+                        <Button disabled={deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={deleteUsersSelected} color="error">
+                            <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                                {
+                                    !deleteUserIsLoading ?
+                                        <>
+                                            <DeleteIcon sx={{ fontSize: 30, paddingBottom: .2, whiteSpace: 'noWrap' }} />
+                                            <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteUsersButton")}</Box>
+                                        </>
+                                        : <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteLoading")}</Box>
+                                }
 
-                        </Stack>
-                    </Button>
+                            </Stack>
+                        </Button>
+                        {/* <Button disabled={deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={deleteUsersSelected} color="primary">
+                            <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                                    <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("selectAllButton")}</Box>
+                            </Stack>
+                        </Button> */}
+                    </Stack>
                 </Fade >
             </Box>
             {

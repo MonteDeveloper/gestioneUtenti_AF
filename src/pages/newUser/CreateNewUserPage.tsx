@@ -37,11 +37,7 @@ export function CreateNewUserPage() {
         try {
             addAlert(`'${user.email}': ${t("creatingUser")}`, 'info');
             await mutateCreateUser(user);
-            if(createUserIsError){
-                addAlert(`'${user.email}': ${t("userCreationError")}`, 'error');
-            }else{
-                addAlert(`'${user.email}': ${t("userCreatedSuccess")}`, 'success');
-            }
+            addAlert(`'${user.email}': ${t("userCreatedSuccess")}`, 'success');
             queryClient.clear();
             navigate('/');
         } catch (error) {

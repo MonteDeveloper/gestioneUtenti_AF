@@ -1,22 +1,35 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteUsersById, getUserById } from "../../service/users/users.api";
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import { deleteUsersById, editUser, getUserById } from "../../service/users/users.api";
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, ListItemText, Modal, Paper, Stack, TextField, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useTranslation } from "react-i18next";
 import HeaderFixed from "../../shared/components/HeaderFixed";
 import { useQueryClient } from "react-query";
 import useAlertsStore from "../../shared/alerts/alertsStore";
+import { Controller, useForm } from "react-hook-form";
+import { User } from "../../models/user";
+
+interface FormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    birthDate: string;
+    address: string;
+}
 
 export function UserInfoPage() {
     const { id } = useParams();
     const { data: user, isLoading: getUserIsLoading, error: getUserIsError } = getUserById(id!);
     const { isLoading: deleteUserIsLoading, isError: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const queryClient = useQueryClient();
-    const {addAlert} = useAlertsStore();
+    const { addAlert } = useAlertsStore();
+    const { handleSubmit, control, formState: { errors, isDirty }, reset: resetEditForm } = useForm<FormData>();
+    const { isLoading: editUserIsLoading, isError, mutateAsync: mutateEditUser } = editUser(id!);
 
     function formatDate(dateString: string) {
         const date = new Date(dateString);
@@ -26,16 +39,59 @@ export function UserInfoPage() {
         return `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
     }
 
+    function formatDate2(dateString: string) {
+        const date = new Date(dateString);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth() + 1;
+        const year = date.getUTCFullYear();
+        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+    }
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleClickDeleteUser = () => setIsDialogOpen(true);
 
-    function handleCloseDialog(isDialogConfirmed: boolean, idUser: string) {
+    const handleClickEditUser = () => handleOpenEditModal();
+
+    function handleOpenEditModal() {
+        setIsEditModalOpen(true);
+    }
+
+    function handleCloseEditModal(event?: {}, reason?: string) {
+        if (reason == 'backdropClick') {
+            return;
+        }
+        setIsEditModalOpen(false);
+        resetEditForm();
+    }
+
+    function handleCloseEditModalDialog(isDialogConfirmed: boolean, idUser: string) {
         isDialogConfirmed ? deleteUser(idUser) : null;
         setIsDialogOpen(false);
     };
 
-    async function deleteUser (idUser: string) {
+    async function onEditSubmit(data: FormData) {
+        const editedUser: Partial<User> = {
+            address: data.address,
+            birthday_date: data.birthDate,
+            email: data.email,
+            name: data.firstName,
+            surname: data.lastName,
+        }
+        try {
+            console.log(editedUser);
+            addAlert(`'${user?.email}': ${t("editingUser")}`, 'info');
+            await mutateEditUser(editedUser);
+            addAlert(`'${user?.email}': ${t("userEditedSuccess")}`, 'success');
+            queryClient.clear();
+            setIsEditModalOpen(false);
+        } catch (error) {
+            addAlert(`'${user?.email}': ${t("userEditError")}`, 'error');
+        }
+    };
+
+    async function deleteUser(idUser: string) {
         addAlert(`'${user?.email}': ${t("deletingUser")}`, 'info');
         try {
             await mutateDeleteUser([idUser]);
@@ -57,15 +113,21 @@ export function UserInfoPage() {
                     </Stack>
                 </Button>,
                 <Stack direction={'row'} spacing={2}>
-                    <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={() => handleClickDeleteUser()} color="error">
+                    <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={handleClickDeleteUser} color="error">
                         <Stack direction={'row'} alignItems={'center'} spacing={1}>
                             <DeleteIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                             {
                                 deleteUserIsLoading ?
-                                <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("deleteUserButtonLoading")}</Box>
-                                :
-                                <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("deleteUserButton")}</Box>
+                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("deleteUserButtonLoading")}</Box>
+                                    :
+                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("deleteUserButton")}</Box>
                             }
+                        </Stack>
+                    </Button>
+                    <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={handleClickEditUser} color="primary">
+                        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                            <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
+                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("editUserButton")}</Box>
                         </Stack>
                     </Button>
                 </Stack>
@@ -114,11 +176,108 @@ export function UserInfoPage() {
                 </Paper>
             </Stack>
 
+            {/* EDIT MODAL */}
+            <Modal
+                open={isEditModalOpen}
+                onClose={handleCloseEditModal}
+                aria-labelledby="modal-edit-user"
+                aria-describedby="modal-edit-user-description"
+            >
+                <Paper elevation={0} sx={{ p: 4, borderRadius: 3, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', }}>
+                    <Stack spacing={3}>
 
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {t('titleEditUserModal')}
+                        </Typography>
+                        <form onSubmit={handleSubmit(onEditSubmit)} id='newUserForm'>
+                            <Stack spacing={2}>
+                                <FormControl fullWidth margin="normal">
+                                    <Controller
+                                        name="firstName"
+                                        control={control}
+                                        defaultValue={user?.name}
+                                        rules={{ required: t("errorFirstNameRequired") }}
+                                        render={({ field }) => (
+                                            <TextField disabled={editUserIsLoading} label={t("formFirstNameLabel")} {...field} error={!!errors.firstName} helperText={errors.firstName?.message} />
+                                        )}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <Controller
+                                        name="lastName"
+                                        control={control}
+                                        defaultValue={user?.surname}
+                                        rules={{ required: t("errorLastNameRequired") }}
+                                        render={({ field }) => (
+                                            <TextField disabled={editUserIsLoading} label={t("formLastNameLabel")} {...field} error={!!errors.lastName} helperText={errors.lastName?.message} />
+                                        )}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <Controller
+                                        name="email"
+                                        control={control}
+                                        defaultValue={user?.email}
+                                        rules={{ required: t("errorEmailRequired"), pattern: { value: /^\S+@\S+$/i, message: t("errorEmailInvalid") } }}
+                                        render={({ field }) => (
+                                            <TextField disabled={editUserIsLoading} label={t("formEmailLabel")} {...field} error={!!errors.email} helperText={errors.email?.message} />
+                                        )}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    {user?.birthday_date &&
+                                        <Controller
+                                            name="birthDate"
+                                            control={control}
+                                            defaultValue={formatDate2(user?.birthday_date)}
+                                            rules={{ required: t("errorBirthdayRequired"), pattern: { value: /^[^.]+$/, message: t("errorBirthdayRequired") } }}
+                                            render={({ field }) => (
+                                                <TextField InputLabelProps={{ shrink: true }} disabled={editUserIsLoading} label={t("formBirthdayLabel")} type="date" lang={localStorage.getItem('language') || i18n.language} {...field} error={!!errors.birthDate} helperText={errors.birthDate?.message} />
+                                            )}
+                                        />}
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <Controller
+                                        name="address"
+                                        control={control}
+                                        defaultValue={user?.address}
+                                        rules={{ required: t("errorAddressRequired") }}
+                                        render={({ field }) => (
+                                            <TextField disabled={editUserIsLoading} label={t("formAddressLabel")} {...field} error={!!errors.address} helperText={errors.address?.message} />
+                                        )}
+                                    />
+                                </FormControl>
+                                <Stack direction={'row'} justifyContent={'space-between'} spacing={2}>
+                                    <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="outlined" sx={{ px: 3, borderRadius: 3 }} onClick={handleCloseEditModal} color="secondary">
+                                        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                                            {/* <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} /> */}
+                                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("closeButton")}</Box>
+                                        </Stack>
+                                    </Button>
+                                    <Button type="submit" disabled={getUserIsLoading || !isDirty || editUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} color="primary">
+                                        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                                            {
+                                                !editUserIsLoading ?
+                                                    <>
+                                                        {/* <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} /> */}
+                                                        <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("confirmEditUserButton")}</Box>
+                                                    </> :
+                                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("loading")}</Box>
+                                            }
+                                        </Stack>
+                                    </Button>
+                                </Stack>
+                            </Stack>
+                        </form>
+                    </Stack>
+                </Paper>
+            </Modal>
+
+            {/* DIALOG CONFIRM DELETE USER */}
             {!getUserIsLoading && !getUserIsError && user &&
                 <Dialog
                     open={isDialogOpen}
-                    onClose={handleCloseDialog}
+                    onClose={handleCloseEditModalDialog}
                     sx={{ '& > * > :first-of-type': { borderRadius: 3, p: 1 } }}
                 >
                     <DialogTitle>
@@ -130,8 +289,8 @@ export function UserInfoPage() {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button sx={{ borderRadius: 3, bgcolor: 'white' }} variant="outlined" onClick={() => handleCloseDialog(false, user.id)}>{t("cancelButton")}</Button>
-                        <Button sx={{ borderRadius: 3 }} variant="contained" color="error" onClick={() => handleCloseDialog(true, user.id)} autoFocus>
+                        <Button sx={{ borderRadius: 3, bgcolor: 'white' }} variant="outlined" onClick={() => handleCloseEditModalDialog(false, user.id)}>{t("cancelButton")}</Button>
+                        <Button sx={{ borderRadius: 3 }} variant="contained" color="error" onClick={() => handleCloseEditModalDialog(true, user.id)} autoFocus>
                             {t("deleteUserButton")}
                         </Button>
                     </DialogActions>

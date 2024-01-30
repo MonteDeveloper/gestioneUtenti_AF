@@ -37,6 +37,10 @@ const mutateCreateUser = async (user: Partial<User>) => {
   return newUser;
 };
 
+const mutateEditUser = async (userId: string, editedUser: Partial<User>) => {
+  await pb.collection('usersData').update(userId, editedUser);
+}
+
 // useQuery
 export function getUsers(currentPage: number, searchValue?: string) {
   return useQuery(['users', searchValue, currentPage], () => fetchUsers(currentPage, searchValue));
@@ -52,5 +56,9 @@ export function deleteUsersById() {
 
 export function createUser() {
   return useMutation((user: Partial<User>) => mutateCreateUser(user));
+}
+
+export function editUser(userId: string) {
+  return useMutation((editedUser: Partial<User>) => mutateEditUser(userId, editedUser));
 }
 

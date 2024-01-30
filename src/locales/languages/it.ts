@@ -43,4 +43,11 @@ export const translation = {
     "deletingSelectedUsers": "Eliminazione degli utenti selezionati in corso...",
     "selectedUsersDeletedSuccess": "Utenti selezionati eliminati correttamente",
     "selectedUsersDeletionError": "Errore nell'eliminazione degli utenti selezionati, riprovare",
+    "closeButton": "Chiudi",
+    "confirmEditUserButton": "Conferma Modifica",
+    "editUserButton": "Modifica Utente",
+    "titleEditUserModal": "Modifica i dati e le informazioni dell'utente",
+    "editingUser": "Modifica dell'utente in corso...",
+    "userEditedSuccess": "Utente modificato con successo!",
+    "userEditError": "Errore nella modifica dell'utente, riprovare",
 }
