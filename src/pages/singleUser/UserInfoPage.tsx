@@ -11,6 +11,8 @@ import { useQueryClient } from "react-query";
 import useAlertsStore from "../../shared/alerts/alertsStore";
 import { Controller, useForm } from "react-hook-form";
 import { User } from "../../models/user";
+import { format } from "date-fns";
+import { getCurrentLocale } from "../../locales/i18n";
 
 interface FormData {
     firstName: string;
@@ -31,21 +33,9 @@ export function UserInfoPage() {
     const { handleSubmit, control, formState: { errors, isDirty }, reset: resetEditForm } = useForm<FormData>();
     const { isLoading: editUserIsLoading, isError, mutateAsync: mutateEditUser } = editUser(id!);
 
-    function formatDate(dateString: string) {
-        const date = new Date(dateString);
-        const day = date.getUTCDate();
-        const month = date.getUTCMonth() + 1;
-        const year = date.getUTCFullYear();
-        return `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
-    }
+    const formatDateInput = (dateString: string) => format(dateString, 'yyyy-MM-dd', { locale: getCurrentLocale() });
 
-    function formatDate2(dateString: string) {
-        const date = new Date(dateString);
-        const day = date.getUTCDate();
-        const month = date.getUTCMonth() + 1;
-        const year = date.getUTCFullYear();
-        return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-    }
+    const formatDateView = (dateString: string) => format(dateString, 'dd MMMM yyyy', { locale: getCurrentLocale() });
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -152,13 +142,13 @@ export function UserInfoPage() {
                                                 <Stack height={1} justifyContent={'center'}>
                                                     <Stack spacing={3}>
                                                         <Stack direction={'row'} spacing={3}>
-                                                            <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("birthdayDate")} secondary={formatDate(user.birthday_date)} />
+                                                            <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("birthdayDate")} secondary={formatDateView(user.birthday_date)} />
                                                             <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("address")} secondary={user.address} />
                                                         </Stack>
                                                     </Stack>
                                                 </Stack>
                                             </Box>
-                                            <Typography variant="caption" color='textSecondary'>{t("userCreatedDate")} {formatDate(user.created)}</Typography>
+                                            <Typography variant="caption" color='textSecondary'>{t("userCreatedDate")} {formatDateView(user.created)}</Typography>
                                         </Stack>
                                     );
                                 case getUserIsLoading == true:
@@ -229,7 +219,7 @@ export function UserInfoPage() {
                                         <Controller
                                             name="birthDate"
                                             control={control}
-                                            defaultValue={formatDate2(user?.birthday_date)}
+                                            defaultValue={formatDateInput(user?.birthday_date)}
                                             rules={{ required: t("errorBirthdayRequired"), pattern: { value: /^[^.]+$/, message: t("errorBirthdayRequired") } }}
                                             render={({ field }) => (
                                                 <TextField InputLabelProps={{ shrink: true }} disabled={editUserIsLoading} label={t("formBirthdayLabel")} type="date" lang={localStorage.getItem('language') || i18n.language} {...field} error={!!errors.birthDate} helperText={errors.birthDate?.message} />
