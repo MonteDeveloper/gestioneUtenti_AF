@@ -9,7 +9,7 @@ import { deleteUsersById } from "../../../service/users/users.api";
 import { useQueryClient } from "react-query";
 import useAlertsStore from "../../../shared/alerts/alertsStore";
 
-interface UsersData {
+interface UsersRawData {
     page: number;
     perPage: number;
     totalItems: number;
@@ -18,37 +18,23 @@ interface UsersData {
 }
 
 interface PropsUsersListPanel {
-    usersRawData: UsersData | undefined;
+    usersRawData: UsersRawData | undefined;
     isLoadingUsers: boolean;
     isError: boolean;
     changePage: (newPage: number) => void;
 }
 
 export function UsersListPanel(props: PropsUsersListPanel) {
+    const { isLoading: deleteUserIsLoading, mutateAsync: mutateDeleteUser } = deleteUsersById();
     const navigate = useNavigate();
-    const [selectedUsersId, setSelectedUsers] = useState<string[]>([]);
     const { t } = useTranslation();
-    const { isLoading: deleteUserIsLoading, isError: deleteUserIsError, mutateAsync: mutateDeleteUser } = deleteUsersById();
     const queryClient = useQueryClient();
     const { addAlert } = useAlertsStore();
 
-    function isUserSelected(userId: string) {
-        return selectedUsersId.includes(userId);
-    }
+    const [selectedUsersId, setSelectedUsers] = useState<string[]>([]);
 
-    function handleToggleUser(userId: string): void {
-        const updatedSelectedUsers = [...selectedUsersId];
-
-        const userIndex = updatedSelectedUsers.indexOf(userId);
-
-        if (userIndex !== -1) {
-            updatedSelectedUsers.splice(userIndex, 1);
-        } else {
-            updatedSelectedUsers.push(userId);
-        }
-
-        setSelectedUsers(updatedSelectedUsers);
-    }
+    // FUNCTIONS---------------
+    const isUserSelected = (userId: string) => selectedUsersId.includes(userId);
 
     async function deleteUsersSelected() {
         addAlert(t("deletingSelectedUsers"), 'info');
@@ -65,10 +51,22 @@ export function UsersListPanel(props: PropsUsersListPanel) {
         }
     }
 
-    function handleChangePage(event: React.ChangeEvent<unknown>, newPage: number) {
-        props.changePage(newPage);
+    // HANDLERS-----------------
+    function handleToggleUser(userId: string): void {
+        const updatedSelectedUsers = [...selectedUsersId];
+
+        const userIndex = updatedSelectedUsers.indexOf(userId);
+
+        if (userIndex !== -1) {
+            updatedSelectedUsers.splice(userIndex, 1);
+        } else {
+            updatedSelectedUsers.push(userId);
+        }
+
+        setSelectedUsers(updatedSelectedUsers);
     }
 
+    const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => props.changePage(newPage);
 
     return (
         <>
@@ -127,14 +125,6 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                 }
                                 break;
                             case props.isError:
-                                return (
-                                    <Collapse>
-                                        <ListItem sx={{ backgroundColor: 'white', borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
-                                            <ListItemText primary={t('uknownError')} />
-                                        </ListItem>
-                                    </Collapse>
-                                );
-
                             default:
                                 return (
                                     <Collapse>
@@ -166,11 +156,6 @@ export function UsersListPanel(props: PropsUsersListPanel) {
 
                             </Stack>
                         </Button>
-                        {/* <Button disabled={deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={deleteUsersSelected} color="primary">
-                            <Stack direction={'row'} alignItems={'center'} spacing={1}>
-                                    <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("selectAllButton")}</Box>
-                            </Stack>
-                        </Button> */}
                     </Stack>
                 </Fade >
             </Box>

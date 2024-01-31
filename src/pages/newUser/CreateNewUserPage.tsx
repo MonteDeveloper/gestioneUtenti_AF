@@ -9,24 +9,17 @@ import { User } from '../../models/user';
 import HeaderFixed from '../../shared/components/HeaderFixed';
 import { useQueryClient } from 'react-query';
 import useAlertsStore from '../../shared/alerts/alertsStore';
-
-interface FormData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    birthDate: string;
-    address: string;
-}
+import { FormUserData } from '../../models/form';
 
 export function CreateNewUserPage() {
-    const { handleSubmit, control, formState: { errors } } = useForm<FormData>();
-    const { isLoading: createUserIsLoading, error: createUserIsError, mutateAsync: mutateCreateUser } = createUser();
+    const { handleSubmit, control, formState: { errors } } = useForm<FormUserData>();
+    const { isLoading: createUserIsLoading, mutateAsync: mutateCreateUser } = createUser();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const queryClient = useQueryClient();
     const {addAlert} = useAlertsStore();
 
-    async function onSubmit(data: FormData) {
+    async function onCreateUserSubmit(data: FormUserData) {
         const user: Partial<User> = {
             address: data.address,
             birthday_date: data.birthDate,
@@ -69,7 +62,7 @@ export function CreateNewUserPage() {
             ]} />
 
             <Container maxWidth="sm" sx={{ py: 3 }}>
-                <form onSubmit={handleSubmit(onSubmit)} id='newUserForm'>
+                <form onSubmit={handleSubmit(onCreateUserSubmit)} id='newUserForm'>
                     <Stack spacing={2}>
                         <FormControl fullWidth margin="normal">
                             <Controller

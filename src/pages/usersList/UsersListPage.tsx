@@ -11,32 +11,28 @@ import HeaderFixed from '../../shared/components/HeaderFixed';
 export function UsersListPage() {
     const [searchParameter, setSearchParameter] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+
     const { data: usersListRawData, isLoading: isGetUsersLoading, isError: isGetUsersError } = getUsers(currentPage, searchParameter);
 
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    function handleSearch(searchValue: string){
-        setSearchParameter(searchValue);
-    }
-
-    function changeCurrentPage(newPage: number){
-        setCurrentPage(newPage);
-    }
+    const handleOnSearch = (searchValue: string) => setSearchParameter(searchValue);
+    const handleChangePage = (newPage: number) => setCurrentPage(newPage);
 
     return (
         <>
             <HeaderFixed components={[
-                <SearchBar onSearch={handleSearch} />,
-                <Button sx={{borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15}} variant="contained" color="primary" onClick={() => navigate('/create-user')}>
-                    <AddIcon />
-                    <span>{t('newUserButton')}</span>
+                <SearchBar onSearch={handleOnSearch} />,
+                <Button sx={{ borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15 }} variant="contained" color="primary" onClick={() => navigate('/create-user')}>
+                    <AddIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
+                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t('newUserButton')}</Box>
                 </Button>
             ]} />
             <Container maxWidth="md">
-                    <Box sx={{ px: 3, width: 1 }}>
-                        <UsersListPanel isLoadingUsers={isGetUsersLoading} isError={isGetUsersError} usersRawData={usersListRawData} changePage={changeCurrentPage} />
-                    </Box>
+                <Box sx={{ px: 3, width: 1 }}>
+                    <UsersListPanel isLoadingUsers={isGetUsersLoading} isError={isGetUsersError} usersRawData={usersListRawData} changePage={handleChangePage} />
+                </Box>
             </Container>
         </>
     )

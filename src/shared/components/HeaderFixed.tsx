@@ -1,5 +1,5 @@
 import { Stack, Box, Typography, Container, Paper } from '@mui/material';
-import { ChangeLanguageSelect } from '../../shared/ChangeLanguageSelect';
+import { ChangeLanguageSelect } from './ChangeLanguageSelect';
 import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';
 import React from 'react';

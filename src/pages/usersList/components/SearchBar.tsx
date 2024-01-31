@@ -2,13 +2,10 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { FormSearch } from "../../../models/form";
 
 interface SearchBarProps {
     onSearch: (searchValue: string) => void;
-}
-
-interface FormData {
-    searchValue: string,
 }
 
 export function SearchBar(props: SearchBarProps) {
@@ -19,9 +16,9 @@ export function SearchBar(props: SearchBarProps) {
         register,
         handleSubmit,
         setValue,
-    } = useForm<FormData>();
+    } = useForm<FormSearch>();
 
-    const onSearchSubmit = (data: FormData) => {
+    const onSearchSubmit = (data: FormSearch) => {
         onSearch(data.searchValue);
     };
 
