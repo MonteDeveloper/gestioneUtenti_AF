@@ -1,26 +1,22 @@
 import { BrowserRouter } from 'react-router-dom';
 import './App.css'
-import { ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline } from '@mui/material';
 import { MyRoutes } from './service/MyRoutes';
 import './locales/i18n';
 import { SnackbarProvider } from './shared/alerts/SnackbarProvider';
+import { MyThemeProvider } from './themes/ThemeContext';
 
 
 function App() {
-  const themeSettings = createTheme({
-    palette: {
-      mode: 'light',
-    }
-  });
-
   return (
-    <ThemeProvider theme={themeSettings}>
+    <MyThemeProvider>
+      <CssBaseline />
       <SnackbarProvider>
         <BrowserRouter>
-            <MyRoutes />
+          <MyRoutes />
         </BrowserRouter>
       </SnackbarProvider>
-    </ThemeProvider>
+    </MyThemeProvider>
   )
 }
 

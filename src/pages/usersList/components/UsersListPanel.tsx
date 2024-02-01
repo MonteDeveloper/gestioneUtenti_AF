@@ -77,7 +77,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                             case props.isLoadingUsers:
                                 return (
                                     <Collapse>
-                                        <ListItem sx={{ backgroundColor: 'white', borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
+                                        <ListItem sx={{ borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
                                             <ListItemText primary={t('loading')} />
                                         </ListItem>
                                     </Collapse>
@@ -94,7 +94,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                                         inputProps={{ 'aria-labelledby': user.id }}
                                                     />
                                                 }
-                                                sx={{ backgroundColor: 'white', borderRadius: 3, overflow: 'hidden', my: .5 }}
+                                                sx={{ borderRadius: 3, overflow: 'hidden', my: .5 }}
                                                 disablePadding
                                             >
                                                 <ListItemButton disabled={deleteUserIsLoading && selectedUsersId.includes(user.id)} onClick={() => navigate(`/user-info/${user.id}`)} selected={isUserSelected(user.id)}>
@@ -117,7 +117,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                 } else {
                                     return (
                                         <Collapse>
-                                            <ListItem sx={{ backgroundColor: 'white', borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
+                                            <ListItem sx={{ borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
                                                 <ListItemText primary={t('noUsersFound')} />
                                             </ListItem>
                                         </Collapse>
@@ -128,7 +128,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                             default:
                                 return (
                                     <Collapse>
-                                        <ListItem sx={{ backgroundColor: 'white', borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
+                                        <ListItem sx={{ borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
                                             <ListItemText primary={t('uknownError')} />
                                         </ListItem>
                                     </Collapse>

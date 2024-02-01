@@ -1,10 +1,12 @@
-import { Stack, Box, Typography, Container, Paper } from '@mui/material';
+import { Stack, Box, Typography, Container, Paper, Button, Switch } from '@mui/material';
 import { ChangeLanguageSelect } from './ChangeLanguageSelect';
 import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import useAlertsStore from '../alerts/alertsStore';
+import { useThemeContext } from '../../themes/ThemeContext';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
 
 interface PropsHeaderFixed {
     components: ReactElement[];
@@ -21,6 +23,8 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
 
     const { t } = useTranslation();
 
+    const { darkMode, toggleDarkMode } = useThemeContext();
+
     const titlesPages: TitlesPages = {
         "users-list": "userList",
         "user-info": "userInfo",
@@ -31,7 +35,7 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
         <>
             <Box sx={{ position: 'fixed', start: 0, top: 0, zIndex: 99, width: 1 }}>
                 <Stack spacing={2} alignItems={'center'}>
-                    <Paper elevation={0} sx={{ boxShadow: '0px 0px 13px 1px rgba(0,0,0,0.10)', backgroundColor: 'white', width: 1, py: 2, px: 3, borderRadius: 0 }}>
+                    <Paper elevation={0} sx={{ boxShadow: '0px 0px 13px 1px rgba(0,0,0,0.10)', width: 1, py: 2, px: 3, borderRadius: 0 }}>
                         <Container>
                             <Stack width={1} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
                                 <Box>
@@ -42,7 +46,16 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
                                         {t(`subtitles.${titlesPages[page]}Page`)}
                                     </Typography>
                                 </Box>
-                                <ChangeLanguageSelect />
+                                <Stack direction={'row'} spacing={2} alignItems={'center'}>
+                                    <Switch
+                                        checked={darkMode}
+                                        onChange={toggleDarkMode}
+                                        color="default"
+                                        icon={<WbSunnyIcon sx={{bgcolor:'#176ec3', p: .5, borderRadius: "100%", transform: 'translateY(-8%)' }} />}
+                                        checkedIcon={<NightsStayIcon sx={{bgcolor:'#7db0d9', color: 'black', p: .5, borderRadius: "100%", transform: 'translateY(-8%)' }} />}
+                                    />
+                                    <ChangeLanguageSelect />
+                                </Stack>
                             </Stack>
                         </Container>
                     </Paper>
