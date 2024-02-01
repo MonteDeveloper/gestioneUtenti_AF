@@ -28,7 +28,7 @@ export function SnackbarProvider({ children }: SnackbarProviderProps) {
                     onClose={handleClose(alert.id)}
                     style={{ position: 'fixed', bottom: `${index * 55}px`, left: 0, padding: 15 }}
                 >
-                    <Alert severity={alert.type} onClose={handleClose(alert.id)}>
+                    <Alert severity={alert.type} onClose={handleClose(alert.id)} sx={{borderRadius: 3}}>
                         {alert.message}
                     </Alert>
                 </Snackbar>

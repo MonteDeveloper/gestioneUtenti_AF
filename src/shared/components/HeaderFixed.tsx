@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { useThemeContext } from '../../themes/ThemeContext';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
+import useThemeStore from '../themes/useThemeStore';
 
 interface PropsHeaderFixed {
     components: ReactElement[];
@@ -23,7 +23,7 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
 
     const { t } = useTranslation();
 
-    const { darkMode, toggleDarkMode } = useThemeContext();
+    const { darkMode, toggleDarkMode } = useThemeStore();
 
     const titlesPages: TitlesPages = {
         "users-list": "userList",

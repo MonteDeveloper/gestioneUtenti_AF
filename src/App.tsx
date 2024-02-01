@@ -1,22 +1,24 @@
 import { BrowserRouter } from 'react-router-dom';
 import './App.css'
-import { CssBaseline } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { MyRoutes } from './service/MyRoutes';
 import './locales/i18n';
 import { SnackbarProvider } from './shared/alerts/SnackbarProvider';
-import { MyThemeProvider } from './themes/ThemeContext';
+import useThemeStore from './shared/themes/useThemeStore';
 
 
 function App() {
+  const { darkMode, lightTheme, darkTheme } = useThemeStore();
+
   return (
-    <MyThemeProvider>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <SnackbarProvider>
         <BrowserRouter>
           <MyRoutes />
         </BrowserRouter>
       </SnackbarProvider>
-    </MyThemeProvider>
+    </ThemeProvider>
   )
 }
 
