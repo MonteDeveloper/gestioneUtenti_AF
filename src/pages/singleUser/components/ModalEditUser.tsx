@@ -94,7 +94,7 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                         name="email"
                                         control={control}
                                         defaultValue={user?.email}
-                                        rules={{ required: t("formValidations.emailRequired"), pattern: { value: /^\S+@\S+$/i, message: t("formValidations.emailInvalid") } }}
+                                        rules={{ required: t("formValidations.emailRequired"), pattern: { value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, message: t("formValidations.emailInvalid") } }}
                                         render={({ field }) => (
                                             <TextField disabled={editUserIsLoading} label={t("labels.formEmail")} {...field} error={!!errors.email} helperText={errors.email?.message} />
                                         )}
