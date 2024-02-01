@@ -26,7 +26,7 @@ export function UsersListPage() {
                 <SearchBar onSearch={handleOnSearch} />,
                 <Button sx={{ borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15 }} variant="contained" color="primary" onClick={() => navigate('/create-user')}>
                     <AddIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t('newUserButton')}</Box>
+                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t('buttons.newUser')}</Box>
                 </Button>
             ]} />
             <Container maxWidth="md">

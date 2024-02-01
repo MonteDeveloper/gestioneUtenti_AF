@@ -28,14 +28,14 @@ export function UserInfoPage() {
 
     // FUNCTIONS----------------
     async function deleteUser(idUser: string) {
-        addAlert(`'${user?.email}': ${t("deletingUser")}`, 'info');
+        addAlert(`'${user?.email}': ${t("messages.deletingUser")}`, 'info');
         try {
             await mutateDeleteUser([idUser]);
-            addAlert(`'${user?.email}': ${t("userDeletedSuccess")}`, 'success');
+            addAlert(`'${user?.email}': ${t("messages.userDeletedSuccess")}`, 'success');
             queryClient.clear();
             navigate('/');
         } catch (error) {
-            addAlert(`'${user?.email}': ${t("userDeletionError")}`, 'error');
+            addAlert(`'${user?.email}': ${t("error.userDeletion")}`, 'error');
         }
     };
 
@@ -60,7 +60,7 @@ export function UserInfoPage() {
                 <Button variant="outlined" sx={{ px: 3, bgcolor: 'white', borderRadius: 3, py: 2 }} onClick={() => navigate('/')}>
                     <Stack direction={'row'} alignItems={'center'} spacing={1}>
                         <ArrowBackIosNewIcon sx={{ fontSize: 15, paddingBottom: .1 }} />
-                        <Box sx={{ fontSize: 15 }}>{t("usersListPageButton")}</Box>
+                        <Box sx={{ fontSize: 15 }}>{t("buttons.userList")}</Box>
                     </Stack>
                 </Button>,
                 <Stack direction={'row'} spacing={2}>
@@ -69,16 +69,16 @@ export function UserInfoPage() {
                             <DeleteIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                             {
                                 deleteUserIsLoading ?
-                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("deleteUserButtonLoading")}</Box>
+                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("messages.deleting")}</Box>
                                     :
-                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("deleteUserButton")}</Box>
+                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.deleteUser")}</Box>
                             }
                         </Stack>
                     </Button>
                     <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={handleClickEditUser} color="primary">
                         <Stack direction={'row'} alignItems={'center'} spacing={1}>
                             <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("editUserButton")}</Box>
+                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.editUser")}</Box>
                         </Stack>
                     </Button>
                 </Stack>
@@ -103,23 +103,23 @@ export function UserInfoPage() {
                                                 <Stack height={1} justifyContent={'center'}>
                                                     <Stack spacing={3}>
                                                         <Stack direction={'row'} spacing={3}>
-                                                            <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("birthdayDate")} secondary={formatDateView(user.birthday_date)} />
-                                                            <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("address")} secondary={user.address} />
+                                                            <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("labels.birthdayDate")} secondary={formatDateView(user.birthday_date)} />
+                                                            <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3, bgcolor: 'white' }} primary={t("labels.address")} secondary={user.address} />
                                                         </Stack>
                                                     </Stack>
                                                 </Stack>
                                             </Box>
-                                            <Typography variant="caption" color='textSecondary'>{t("userCreatedDate")} {formatDateView(user.created)}</Typography>
+                                            <Typography variant="caption" color='textSecondary'>{t("labels.userCreatedDate")} {formatDateView(user.created)}</Typography>
                                         </Stack>
                                     );
                                 case getUserIsLoading == true:
                                     return (
-                                        <Typography variant="subtitle1" color="textSecondary">{t("loading")}</Typography>
+                                        <Typography variant="subtitle1" color="textSecondary">{t("messages.loading")}</Typography>
                                     );
 
                                 default:
                                     return (
-                                        <Typography variant="subtitle1" color="textSecondary">{t("uknownError")}</Typography>
+                                        <Typography variant="subtitle1" color="textSecondary">{t("errors.uknownError")}</Typography>
                                     );
                             }
                         })()}
@@ -140,17 +140,17 @@ export function UserInfoPage() {
                     sx={{ '& > * > :first-of-type': { borderRadius: 3, p: 1 } }}
                 >
                     <DialogTitle>
-                        {`${t("tileDialogDeleteUser")} "${user.email}"?`}
+                        {`${t("dialogs.deleteUserTitle")} "${user.email}"?`}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            {t("descDialogDeleteUser")}
+                            {t("dialogs.deleteUserDesc")}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button sx={{ borderRadius: 3, bgcolor: 'white' }} variant="outlined" onClick={() => handleCloseDeleteDialog(false, user.id)}>{t("cancelButton")}</Button>
+                        <Button sx={{ borderRadius: 3, bgcolor: 'white' }} variant="outlined" onClick={() => handleCloseDeleteDialog(false, user.id)}>{t("buttons.cancelButton")}</Button>
                         <Button sx={{ borderRadius: 3 }} variant="contained" color="error" onClick={() => handleCloseDeleteDialog(true, user.id)} autoFocus>
-                            {t("deleteUserButton")}
+                            {t("buttons.deleteUser")}
                         </Button>
                     </DialogActions>
                 </Dialog>

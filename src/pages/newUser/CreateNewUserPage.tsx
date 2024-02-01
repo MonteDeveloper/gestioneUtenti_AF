@@ -28,13 +28,13 @@ export function CreateNewUserPage() {
             surname: data.lastName,
         }
         try {
-            addAlert(`'${user.email}': ${t("creatingUser")}`, 'info');
+            addAlert(`'${user.email}': ${t("messages.creatingUser")}`, 'info');
             await mutateCreateUser(user);
-            addAlert(`'${user.email}': ${t("userCreatedSuccess")}`, 'success');
+            addAlert(`'${user.email}': ${t("messages.userCreatedSuccess")}`, 'success');
             queryClient.clear();
             navigate('/');
         } catch (error) {
-            addAlert(`'${user.email}': ${t("userCreationError")}`, 'error');
+            addAlert(`'${user.email}': ${t("errors.userCreation")}`, 'error');
         }
     };
 
@@ -44,7 +44,7 @@ export function CreateNewUserPage() {
                 <Button variant="outlined" sx={{ px: 3, py: 2, borderRadius: 3, bgcolor: 'white' }} onClick={() => navigate('/')}>
                     <Stack direction={'row'} alignItems={'center'} spacing={1}>
                         <ArrowBackIosNewIcon sx={{ fontSize: 15, paddingBottom: .1 }} />
-                        <Box sx={{ fontSize: 15 }}>{t("usersListPageButton")}</Box>
+                        <Box sx={{ fontSize: 15 }}>{t("buttons.userList")}</Box>
                     </Stack>
                 </Button>,
                 <Button disabled={createUserIsLoading} variant="contained" sx={{ px: 3, py: 2, borderRadius: 3 }} type='submit' form="newUserForm" color="primary">
@@ -53,9 +53,9 @@ export function CreateNewUserPage() {
                             !createUserIsLoading ?
                                 <>
                                     <AddIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("createUserButton")}</Box>
+                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.createUser")}</Box>
                                 </> :
-                                <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("loading")}</Box>
+                                <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("messages.loading")}</Box>
                         }
                     </Stack>
                 </Button>
@@ -69,9 +69,9 @@ export function CreateNewUserPage() {
                                 name="firstName"
                                 control={control}
                                 defaultValue=""
-                                rules={{ required: t("errorFirstNameRequired") }}
+                                rules={{ required: t("formValidations.firstNameRequired") }}
                                 render={({ field }) => (
-                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("formFirstNameLabel")} {...field} error={!!errors.firstName} helperText={errors.firstName?.message} />
+                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("labels.formFirstName")} {...field} error={!!errors.firstName} helperText={errors.firstName?.message} />
                                 )}
                             />
                         </FormControl>
@@ -80,9 +80,9 @@ export function CreateNewUserPage() {
                                 name="lastName"
                                 control={control}
                                 defaultValue=""
-                                rules={{ required: t("errorLastNameRequired") }}
+                                rules={{ required: t("formValidations.lastNameRequired") }}
                                 render={({ field }) => (
-                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("formLastNameLabel")} {...field} error={!!errors.lastName} helperText={errors.lastName?.message} />
+                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("labels.formLastName")} {...field} error={!!errors.lastName} helperText={errors.lastName?.message} />
                                 )}
                             />
                         </FormControl>
@@ -91,9 +91,9 @@ export function CreateNewUserPage() {
                                 name="email"
                                 control={control}
                                 defaultValue=""
-                                rules={{ required: t("errorEmailRequired"), pattern: { value: /^\S+@\S+$/i, message: t("errorEmailInvalid") } }}
+                                rules={{ required: t("formValidations.emailRequired"), pattern: { value: /^\S+@\S+$/i, message: t("formValidations.emailInvalid") } }}
                                 render={({ field }) => (
-                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("formEmailLabel")} {...field} error={!!errors.email} helperText={errors.email?.message} />
+                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("labels.formEmail")} {...field} error={!!errors.email} helperText={errors.email?.message} />
                                 )}
                             />
                         </FormControl>
@@ -102,9 +102,9 @@ export function CreateNewUserPage() {
                                 name="birthDate"
                                 control={control}
                                 defaultValue=""
-                                rules={{ required: t("errorBirthdayRequired"), pattern: { value: /^[^.]+$/, message: t("errorBirthdayRequired") } }}
+                                rules={{ required: t("formValidations.birthdayRequired") }}
                                 render={({ field }) => (
-                                    <TextField InputLabelProps={{ shrink: true }} disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("formBirthdayLabel")} type="date" lang={localStorage.getItem('language') || i18n.language} {...field} error={!!errors.birthDate} helperText={errors.birthDate?.message} />
+                                    <TextField InputLabelProps={{ shrink: true }} disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("labels.formBirthday")} type="date" lang={localStorage.getItem('language') || i18n.language} {...field} error={!!errors.birthDate} helperText={errors.birthDate?.message} />
                                 )}
                             />
                         </FormControl>
@@ -113,9 +113,9 @@ export function CreateNewUserPage() {
                                 name="address"
                                 control={control}
                                 defaultValue=""
-                                rules={{ required: t("errorAddressRequired") }}
+                                rules={{ required: t("formValidations.addressRequired") }}
                                 render={({ field }) => (
-                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("formAddressLabel")} {...field} error={!!errors.address} helperText={errors.address?.message} />
+                                    <TextField disabled={createUserIsLoading} sx={{ '& > * > :first-child': { bgcolor: 'white' } }} label={t("labels.formAddress")} {...field} error={!!errors.address} helperText={errors.address?.message} />
                                 )}
                             />
                         </FormControl>

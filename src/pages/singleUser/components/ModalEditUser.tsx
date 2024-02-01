@@ -33,13 +33,13 @@ export function ModalEditUser(props: PropsModalEditUser) {
         }
         try {
             console.log(editedUser);
-            addAlert(`'${user?.email}': ${t("editingUser")}`, 'info');
+            addAlert(`'${user?.email}': ${t("messages.editingUser")}`, 'info');
             await mutateEditUser(editedUser);
-            addAlert(`'${user?.email}': ${t("userEditedSuccess")}`, 'success');
+            addAlert(`'${user?.email}': ${t("messages.userEditedSuccess")}`, 'success');
             queryClient.clear();
             setIsEditModalOpen(false);
         } catch (error) {
-            addAlert(`'${user?.email}': ${t("userEditError")}`, 'error');
+            addAlert(`'${user?.email}': ${t("errors.userEdit")}`, 'error');
         }
     };
 
@@ -63,7 +63,7 @@ export function ModalEditUser(props: PropsModalEditUser) {
                     <Stack spacing={3}>
 
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            {t('titleEditUserModal')}
+                            {t('titles.editUserModal')}
                         </Typography>
                         <form onSubmit={handleSubmit(onEditSubmit)} id='newUserForm'>
                             <Stack spacing={2}>
@@ -72,9 +72,9 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                         name="firstName"
                                         control={control}
                                         defaultValue={user?.name}
-                                        rules={{ required: t("errorFirstNameRequired") }}
+                                        rules={{ required: t("formValidations.firstNameRequired") }}
                                         render={({ field }) => (
-                                            <TextField disabled={editUserIsLoading} label={t("formFirstNameLabel")} {...field} error={!!errors.firstName} helperText={errors.firstName?.message} />
+                                            <TextField disabled={editUserIsLoading} label={t("labels.formFirstName")} {...field} error={!!errors.firstName} helperText={errors.firstName?.message} />
                                         )}
                                     />
                                 </FormControl>
@@ -83,9 +83,9 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                         name="lastName"
                                         control={control}
                                         defaultValue={user?.surname}
-                                        rules={{ required: t("errorLastNameRequired") }}
+                                        rules={{ required: t("formValidations.lastNameRequired") }}
                                         render={({ field }) => (
-                                            <TextField disabled={editUserIsLoading} label={t("formLastNameLabel")} {...field} error={!!errors.lastName} helperText={errors.lastName?.message} />
+                                            <TextField disabled={editUserIsLoading} label={t("labels.formLastName")} {...field} error={!!errors.lastName} helperText={errors.lastName?.message} />
                                         )}
                                     />
                                 </FormControl>
@@ -94,9 +94,9 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                         name="email"
                                         control={control}
                                         defaultValue={user?.email}
-                                        rules={{ required: t("errorEmailRequired"), pattern: { value: /^\S+@\S+$/i, message: t("errorEmailInvalid") } }}
+                                        rules={{ required: t("formValidations.emailRequired"), pattern: { value: /^\S+@\S+$/i, message: t("formValidations.emailInvalid") } }}
                                         render={({ field }) => (
-                                            <TextField disabled={editUserIsLoading} label={t("formEmailLabel")} {...field} error={!!errors.email} helperText={errors.email?.message} />
+                                            <TextField disabled={editUserIsLoading} label={t("labels.formEmail")} {...field} error={!!errors.email} helperText={errors.email?.message} />
                                         )}
                                     />
                                 </FormControl>
@@ -106,9 +106,9 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                             name="birthDate"
                                             control={control}
                                             defaultValue={formatDateInput(user?.birthday_date)}
-                                            rules={{ required: t("errorBirthdayRequired"), pattern: { value: /^[^.]+$/, message: t("errorBirthdayRequired") } }}
+                                            rules={{ required: t("formValidations.birthdayRequired") }}
                                             render={({ field }) => (
-                                                <TextField InputLabelProps={{ shrink: true }} disabled={editUserIsLoading} label={t("formBirthdayLabel")} type="date" lang={localStorage.getItem('language') || i18n.language} {...field} error={!!errors.birthDate} helperText={errors.birthDate?.message} />
+                                                <TextField InputLabelProps={{ shrink: true }} disabled={editUserIsLoading} label={t("labels.formBirthday")} type="date" lang={localStorage.getItem('language') || i18n.language} {...field} error={!!errors.birthDate} helperText={errors.birthDate?.message} />
                                             )}
                                         />}
                                 </FormControl>
@@ -117,17 +117,16 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                         name="address"
                                         control={control}
                                         defaultValue={user?.address}
-                                        rules={{ required: t("errorAddressRequired") }}
+                                        rules={{ required: t("formValidations.addressRequired") }}
                                         render={({ field }) => (
-                                            <TextField disabled={editUserIsLoading} label={t("formAddressLabel")} {...field} error={!!errors.address} helperText={errors.address?.message} />
+                                            <TextField disabled={editUserIsLoading} label={t("labels.formAddress")} {...field} error={!!errors.address} helperText={errors.address?.message} />
                                         )}
                                     />
                                 </FormControl>
                                 <Stack direction={'row'} justifyContent={'space-between'} spacing={2}>
                                     <Button variant="outlined" sx={{ px: 3, borderRadius: 3 }} onClick={handleCloseEditModal} color="secondary">
                                         <Stack direction={'row'} alignItems={'center'} spacing={1}>
-                                            {/* <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} /> */}
-                                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("closeButton")}</Box>
+                                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.closeButton")}</Box>
                                         </Stack>
                                     </Button>
                                     <Button type="submit" disabled={!isDirty || editUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} color="primary">
@@ -136,9 +135,9 @@ export function ModalEditUser(props: PropsModalEditUser) {
                                                 !editUserIsLoading ?
                                                     <>
                                                         {/* <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} /> */}
-                                                        <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("confirmEditUserButton")}</Box>
+                                                        <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.confirmEditUser")}</Box>
                                                     </> :
-                                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("loading")}</Box>
+                                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("messages.loading")}</Box>
                                             }
                                         </Stack>
                                     </Button>

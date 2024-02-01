@@ -37,16 +37,16 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     const isUserSelected = (userId: string) => selectedUsersId.includes(userId);
 
     async function deleteUsersSelected() {
-        addAlert(t("deletingSelectedUsers"), 'info');
+        addAlert(t("messages.deletingSelectedUsers"), 'info');
         const selectedUsersSaved = [...selectedUsersId];
         try {
             await mutateDeleteUser(selectedUsersId);
-            addAlert(t("selectedUsersDeletedSuccess"), 'success');
+            addAlert(t("messages.selectedUsersDeletedSuccess"), 'success');
             queryClient.invalidateQueries('users');
             queryClient.clear();
             setSelectedUsers([]);
         } catch (error) {
-            addAlert(t("selectedUsersDeletionError"), 'error');
+            addAlert(t("errors.selectedUsersDeletion"), 'error');
             setSelectedUsers(selectedUsersSaved);
         }
     }
@@ -149,9 +149,9 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                     !deleteUserIsLoading ?
                                         <>
                                             <DeleteIcon sx={{ fontSize: 30, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                                            <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteUsersButton")}</Box>
+                                            <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("buttons.deleteUsers")}</Box>
                                         </>
-                                        : <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("deleteLoading")}</Box>
+                                        : <Box sx={{ fontSize: 20, whiteSpace: 'noWrap' }}>{t("messages.deleting")}</Box>
                                 }
 
                             </Stack>

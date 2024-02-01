@@ -19,15 +19,10 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
     const pathParts = location.pathname.split('/');
     const page = pathParts[1];
 
-    const { addAlert } = useAlertsStore();
-    const handleButtonAlertClick = () => {
-        addAlert('Operazione completata con successo', 'success');
-    };
-
     const { t } = useTranslation();
 
     const titlesPages: TitlesPages = {
-        "users-list": "usersList",
+        "users-list": "userList",
         "user-info": "userInfo",
         "create-user": "newUser",
     }
@@ -41,10 +36,10 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
                             <Stack width={1} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
                                 <Box>
                                     <Typography variant="h4">
-                                        {t(`${titlesPages[page]}PageTitle`)}
+                                        {t(`titles.${titlesPages[page]}Page`)}
                                     </Typography>
                                     <Typography variant="caption" color="textSecondary" gutterBottom>
-                                        {t(`${titlesPages[page]}PageSubtitle`)}
+                                        {t(`subtitles.${titlesPages[page]}Page`)}
                                     </Typography>
                                 </Box>
                                 <ChangeLanguageSelect />
@@ -54,7 +49,6 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
 
                     <Container>
                         <Stack direction={'row'} justifyContent={'space-between'} spacing={2} width={1}>
-                        {/* <button onClick={handleButtonAlertClick}>Alert</button> */}
                             {
                                 props.components.map((component, index) => (
                                     <React.Fragment key={index}>

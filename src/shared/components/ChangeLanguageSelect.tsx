@@ -21,12 +21,12 @@ export function ChangeLanguageSelect() {
   return (
     <>
       <FormControl sx={{ minWidth: 85 }}>
-        <InputLabel sx={{ borderRadius: 3 }} id="language-label">{t('languageLabelSelect')}</InputLabel>
+        <InputLabel sx={{ borderRadius: 3 }} id="language-label">{t('labels.languageSelect')}</InputLabel>
         <Select
           labelId="language-label"
           id="language-simple"
           value={lng}
-          label={t("languageLabelSelect")}
+          label={t("labels.languageSelect")}
           onChange={handleChange}
         >
           <MenuItem value={'en'}>EN</MenuItem>

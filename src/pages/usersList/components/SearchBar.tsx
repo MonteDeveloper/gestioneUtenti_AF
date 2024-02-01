@@ -39,7 +39,7 @@ export function SearchBar(props: SearchBarProps) {
             <InputBase
                 {...register('searchValue')}
                 sx={{ ml: 1, flex: 1 }}
-                placeholder={t('searchBarPlaceholder')}
+                placeholder={t('placeholders.searchBar')}
                 inputProps={{ 'aria-label': 'search-users' }}
                 onChange={(e) => setValue('searchValue', e.target.value)}
             />
