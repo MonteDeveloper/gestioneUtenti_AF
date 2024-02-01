@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createTheme, Theme } from '@mui/material/styles';
 
 interface ThemeStore {
-    darkMode: boolean;
+    isDarkMode: boolean;
     toggleDarkMode: () => void;
     lightTheme: Theme;
     darkTheme: Theme;
@@ -25,6 +25,7 @@ const useThemeStore = create<ThemeStore>((set) => {
                 styleOverrides: {
                     root: {
                         backgroundColor: '#FFF8E3',
+                        transition: 'background .2s'
                     },
                 },
             },
@@ -32,6 +33,7 @@ const useThemeStore = create<ThemeStore>((set) => {
                 styleOverrides: {
                     root: {
                         backgroundColor: '#FFF8E3',
+                        transition: 'background .2s'
                     },
                 },
             },
@@ -54,6 +56,7 @@ const useThemeStore = create<ThemeStore>((set) => {
                 styleOverrides: {
                     root: {
                         backgroundColor: '#303134',
+                        transition: 'background .2s'
                     },
                 },
             },
@@ -61,6 +64,7 @@ const useThemeStore = create<ThemeStore>((set) => {
                 styleOverrides: {
                     root: {
                         backgroundColor: '#303134',
+                        transition: 'background .2s'
                     },
                 },
             },
@@ -68,8 +72,14 @@ const useThemeStore = create<ThemeStore>((set) => {
     });
 
     return {
-        darkMode: false,
-        toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+        isDarkMode: localStorage.getItem('isDarkMode') != undefined ? JSON.parse(localStorage.getItem('isDarkMode')!) : false,
+        toggleDarkMode: () => {
+            set((state) => {
+                const newIsDarkMode = !state.isDarkMode;
+                localStorage.setItem('isDarkMode', JSON.stringify(newIsDarkMode));
+                return { isDarkMode: newIsDarkMode };
+              });
+        },
         lightTheme,
         darkTheme,
     };

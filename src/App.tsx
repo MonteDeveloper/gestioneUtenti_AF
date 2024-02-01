@@ -8,10 +8,10 @@ import useThemeStore from './shared/themes/useThemeStore';
 
 
 function App() {
-  const { darkMode, lightTheme, darkTheme } = useThemeStore();
+  const { isDarkMode, lightTheme, darkTheme } = useThemeStore();
 
   return (
-    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <SnackbarProvider>
         <BrowserRouter>

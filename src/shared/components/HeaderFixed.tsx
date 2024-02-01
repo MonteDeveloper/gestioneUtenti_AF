@@ -23,7 +23,7 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
 
     const { t } = useTranslation();
 
-    const { darkMode, toggleDarkMode } = useThemeStore();
+    const { isDarkMode, toggleDarkMode } = useThemeStore();
 
     const titlesPages: TitlesPages = {
         "users-list": "userList",
@@ -48,7 +48,7 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
                                 </Box>
                                 <Stack direction={'row'} spacing={2} alignItems={'center'}>
                                     <Switch
-                                        checked={darkMode}
+                                        checked={isDarkMode}
                                         onChange={toggleDarkMode}
                                         color="default"
                                         icon={<WbSunnyIcon sx={{bgcolor:'#176ec3', p: .5, borderRadius: "100%", transform: 'translateY(-8%)' }} />}
