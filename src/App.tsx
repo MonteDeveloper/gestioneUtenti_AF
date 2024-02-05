@@ -4,14 +4,16 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { MyRoutes } from './service/MyRoutes';
 import './locales/i18n';
 import { SnackbarProvider } from './shared/alerts/SnackbarProvider';
-import useThemeStore from './shared/themes/useThemeStore';
+import { useSelector } from 'react-redux';
+import { RootState } from './state/store';
+import { darkTheme, lightTheme } from './state/theme/themes';
 
 
 function App() {
-  const { isDarkMode, lightTheme, darkTheme } = useThemeStore();
+  const theme = useSelector((state: RootState) => state.theme.currentTheme)
 
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <CssBaseline />
       <SnackbarProvider>
         <BrowserRouter>

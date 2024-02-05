@@ -6,7 +6,9 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
-import useThemeStore from '../themes/useThemeStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '../../state/theme/themeSlice';
+import { RootState } from '../../state/store';
 
 interface PropsHeaderFixed {
     components: ReactElement[];
@@ -23,7 +25,9 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
 
     const { t } = useTranslation();
 
-    const { isDarkMode, toggleDarkMode } = useThemeStore();
+    const currentTheme = useSelector((state: RootState) => state.theme.currentTheme)
+
+    const dispatch = useDispatch();
 
     const titlesPages: TitlesPages = {
         "users-list": "userList",
@@ -48,8 +52,8 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
                                 </Box>
                                 <Stack direction={'row'} spacing={2} alignItems={'center'}>
                                     <Switch
-                                        checked={isDarkMode}
-                                        onChange={toggleDarkMode}
+                                        checked={currentTheme === 'dark'}
+                                        onChange={() => dispatch(toggleTheme())}
                                         color="default"
                                         icon={<WbSunnyIcon sx={{bgcolor:'#176ec3', p: .5, borderRadius: "100%", transform: 'translateY(-8%)' }} />}
                                         checkedIcon={<NightsStayIcon sx={{bgcolor:'#7db0d9', color: 'black', p: .5, borderRadius: "100%", transform: 'translateY(-8%)' }} />}
