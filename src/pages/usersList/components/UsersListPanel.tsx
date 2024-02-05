@@ -78,7 +78,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                 return (
                                     <Collapse>
                                         <ListItem sx={{ borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
-                                            <ListItemText primary={t('loading')} />
+                                            <ListItemText primary={t('messages.loading')} />
                                         </ListItem>
                                     </Collapse>
                                 );
@@ -118,7 +118,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                     return (
                                         <Collapse>
                                             <ListItem sx={{ borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
-                                                <ListItemText primary={t('noUsersFound')} />
+                                                <ListItemText primary={t('messages.noUsersFound')} />
                                             </ListItem>
                                         </Collapse>
                                     );
@@ -129,7 +129,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                 return (
                                     <Collapse>
                                         <ListItem sx={{ borderRadius: 3, overflow: 'hidden', my: .5, textAlign: 'center' }}>
-                                            <ListItemText primary={t('uknownError')} />
+                                            <ListItemText primary={t('error.uknownError')} />
                                         </ListItem>
                                     </Collapse>
                                 );

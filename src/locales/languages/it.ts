@@ -62,6 +62,7 @@ export const translation = {
         editingUser: "Modifica dell'utente in corso...",
         deletingUser: "Eliminazione dell'utente in corso...",
         userEditedSuccess: "Utente modificato con successo!",
+        noUsersFound: "Nessun utente trovato",
     },
     dialogs: {
         deleteUserTitle: "Sicuro di voler eliminare l'utente",

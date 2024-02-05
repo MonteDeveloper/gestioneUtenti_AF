@@ -62,6 +62,7 @@ export const translation = {
         editingUser: "Editing user...",
         deletingUser: "Deleting user...",
         userEditedSuccess: "User edited successfully",
+        noUsersFound: "No users found",
     },
     dialogs: {
         deleteUserTitle: "Are you sure you want to delete the user",
