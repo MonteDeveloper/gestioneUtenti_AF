@@ -1,4 +1,4 @@
-import { Stack, Box, Typography, Container, Paper, Button, Switch } from '@mui/material';
+import { Stack, Box, Typography, Container, Paper, Switch } from '@mui/material';
 import { ChangeLanguageSelect } from './ChangeLanguageSelect';
 import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';

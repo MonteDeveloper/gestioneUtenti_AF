@@ -7,18 +7,25 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import HeaderFixed from '../../shared/components/HeaderFixed';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../state/store';
+import { goToPage } from '../../state/pagination/paginationSlice';
 
 export function UsersListPage() {
     const [searchParameter, setSearchParameter] = useState<string>('');
-    const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const { data: usersListRawData, isLoading: isGetUsersLoading, isError: isGetUsersError } = getUsers(currentPage, searchParameter);
+    const dispatch = useDispatch();
+
+    const currentPage = useSelector((state: RootState) => state.pagination.currentPage);
+    const rowsPerPage = useSelector((state: RootState) => state.pagination.rowsPerPage);
+
+    const { data: usersListRawData, isLoading: isGetUsersLoading, isError: isGetUsersError } = getUsers(currentPage, rowsPerPage, searchParameter);
 
     const { t } = useTranslation();
     const navigate = useNavigate();
 
     const handleOnSearch = (searchValue: string) => setSearchParameter(searchValue);
-    const handleChangePage = (newPage: number) => setCurrentPage(newPage);
+    const handleChangePage = (newPage: number) => dispatch(goToPage({newCurrentPage: newPage}));
 
     return (
         <>

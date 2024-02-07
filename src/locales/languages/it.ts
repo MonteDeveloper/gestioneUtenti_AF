@@ -23,6 +23,7 @@ export const translation = {
         formBirthday: "Data di nascita",
         formAddress: "Indirizzo",
         languageSelect: "Lingua",
+        rowsPerPage: "Righe Per Pagina",
     },
     titles: {
         createUserPage: "Crea Nuovo Utente",
@@ -67,6 +68,10 @@ export const translation = {
     dialogs: {
         deleteUserTitle: "Sicuro di voler eliminare l'utente",
         deleteUserDesc: "L'azione è irreversibile, una volta eliminato non potrai più tornare indietro.",
+    },
+    text: {
+        users: "utenti",
+        of: "di",
     }
 };
 

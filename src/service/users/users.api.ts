@@ -1,21 +1,27 @@
 
-import { isError, useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { User } from '../../models/user';
 import { pb } from '../../pocketbase';
+import { store } from '../../state/store';
+import { updateTotalPages } from '../../state/pagination/paginationSlice';
 
 // Funzioni di fetch
-const fetchUsers = async (currentPage: number, searchValue?: string) => {
+const fetchUsers = async (searchValue?: string) => {
   let query = pb.collection('usersData');
-  const itemPerPage: number = 7;
+
+  const currentPage = store.getState().pagination.currentPage;
+  const itemPerPage = store.getState().pagination.rowsPerPage;
 
   if (searchValue) {
     const users = await query.getList<User>(currentPage, itemPerPage, {
       filter: `name ~ "${searchValue}" || surname ~ "${searchValue}" || email ~ "${searchValue}"`,
     });
+    store.dispatch(updateTotalPages(users.totalPages));
     return users;
   }
 
   const users = await query.getList<User>(currentPage, itemPerPage);
+  store.dispatch(updateTotalPages(users.totalPages));
   return users;
 };
 
@@ -42,8 +48,8 @@ const mutateEditUser = async (userId: string, editedUser: Partial<User>) => {
 }
 
 // useQuery
-export function getUsers(currentPage: number, searchValue?: string) {
-  return useQuery(['users', searchValue, currentPage], () => fetchUsers(currentPage, searchValue));
+export function getUsers(currentPage: number, rowsPerPage: number, searchValue?: string) {
+  return useQuery(['users', searchValue, currentPage, rowsPerPage], () => fetchUsers(searchValue));
 }
 
 export function getUserById(id: string) {

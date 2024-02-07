@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Checkbox, Collapse, Fade, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Pagination, Paper, Stack } from "@mui/material";
+import { Avatar, Box, Button, Checkbox, Collapse, Fade, FormControl, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, MenuItem, Pagination, Paper, Select, SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { User } from "../../../models/user";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
@@ -8,6 +8,9 @@ import { TransitionGroup } from "react-transition-group";
 import { deleteUsersById } from "../../../service/users/users.api";
 import { useQueryClient } from "react-query";
 import useAlertsStore from "../../../shared/alerts/alertsStore";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../state/store";
+import { setRowsPerPage } from "../../../state/pagination/paginationSlice";
 
 interface UsersRawData {
     page: number;
@@ -32,6 +35,11 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     const { addAlert } = useAlertsStore();
 
     const [selectedUsersId, setSelectedUsers] = useState<string[]>([]);
+
+    const currentPage = useSelector((state: RootState) => state.pagination.currentPage);
+    const rowsPerPage = useSelector((state: RootState) => state.pagination.rowsPerPage);
+    const totalPages = useSelector((state: RootState) => state.pagination.totalPages);
+    const dispatch = useDispatch();
 
     // FUNCTIONS---------------
     const isUserSelected = (userId: string) => selectedUsersId.includes(userId);
@@ -68,9 +76,13 @@ export function UsersListPanel(props: PropsUsersListPanel) {
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => props.changePage(newPage);
 
+    function handleChangeRowsPerPage(event: SelectChangeEvent) {
+        dispatch(setRowsPerPage(Number(event.target.value)));
+    }
+
     return (
         <>
-            <List sx={{ pb: 15 }}>
+            <List sx={{ pb: 17.7 }}>
                 <TransitionGroup>
                     {(() => {
                         switch (true) {
@@ -163,9 +175,28 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                 props.usersRawData && props.usersRawData.items.length > 0 && selectedUsersId.length == 0 &&
                 <Box sx={{ position: 'fixed', bottom: 50, left: '50%', transform: 'translate(-50%, 0)' }}>
                     {/* PAGINATION */}
-                    <Fade in={selectedUsersId.length == 0 && props.usersRawData.totalPages > 1}>
+                    <Fade in={selectedUsersId.length == 0}>
                         <Paper elevation={0} sx={{ boxShadow: '0px 0px 13px 1px rgba(0,0,0,0.15)', p: 2, borderRadius: 3 }}>
-                            <Pagination count={props.usersRawData.totalPages} page={props.usersRawData.page} onChange={handleChangePage} />
+                            <Stack spacing={2} direction={'row'} alignItems={'center'}>
+                                <Typography color='textSecondary'>
+                                    {currentPage * rowsPerPage - rowsPerPage + 1}-
+                                    {Math.min((currentPage) * rowsPerPage, props.usersRawData.totalItems)}{' '}
+                                    {t('text.of')} {props.usersRawData.totalItems} {t('text.users')}
+                                </Typography>
+                                <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
+                                <Typography color='textSecondary' sx={{ borderRadius: 3 }} id="rows-label">{t('labels.rowsPerPage')}:</Typography>
+                                <Select
+                                    labelId="rows-label"
+                                    value={rowsPerPage.toString()}
+                                    label="Rows"
+                                    onChange={handleChangeRowsPerPage}
+                                >
+                                    <MenuItem value={3}>3</MenuItem>
+                                    <MenuItem value={5}>5</MenuItem>
+                                    <MenuItem value={7}>7</MenuItem>
+                                    <MenuItem value={15}>15</MenuItem>
+                                </Select>
+                            </Stack>
                         </Paper>
                     </Fade >
                 </Box>
