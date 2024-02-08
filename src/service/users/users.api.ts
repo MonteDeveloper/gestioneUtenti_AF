@@ -4,6 +4,7 @@ import { User } from '../../models/user';
 import { pb } from '../../pocketbase';
 import { store } from '../../state/store';
 import { updateTotalPages } from '../../state/pagination/paginationSlice';
+import { updateGlobalListUsers } from '../../state/usersList/usersListSlice';
 
 // Funzioni di fetch
 const fetchUsers = async (searchValue?: string) => {
@@ -17,11 +18,13 @@ const fetchUsers = async (searchValue?: string) => {
       filter: `name ~ "${searchValue}" || surname ~ "${searchValue}" || email ~ "${searchValue}"`,
     });
     store.dispatch(updateTotalPages(users.totalPages));
+    store.dispatch(updateGlobalListUsers(users.items));
     return users;
   }
 
   const users = await query.getList<User>(currentPage, itemPerPage);
   store.dispatch(updateTotalPages(users.totalPages));
+  store.dispatch(updateGlobalListUsers(users.items));
   return users;
 };
 

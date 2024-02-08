@@ -39,6 +39,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     const currentPage = useSelector((state: RootState) => state.pagination.currentPage);
     const rowsPerPage = useSelector((state: RootState) => state.pagination.rowsPerPage);
     const totalPages = useSelector((state: RootState) => state.pagination.totalPages);
+    const usersList = useSelector((state: RootState) => state.usersList.usersList);
     const dispatch = useDispatch();
 
     // FUNCTIONS---------------
@@ -96,7 +97,7 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                 );
                             case props.usersRawData != undefined && props.usersRawData.items.length > 0:
                                 return (
-                                    props.usersRawData.items.map((user: User) => (
+                                    usersList.map((user: User) => (
                                         <Collapse key={user.id}>
                                             <ListItem
                                                 secondaryAction={
