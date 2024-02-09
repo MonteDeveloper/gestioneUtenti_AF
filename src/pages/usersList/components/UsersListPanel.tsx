@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Checkbox, Collapse, Fade, FormControl, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, MenuItem, Pagination, Paper, Select, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Button, Checkbox, Collapse, Fade, FormControl, InputLabel, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, MenuItem, Pagination, Paper, Select, SelectChangeEvent, Stack, Typography, useTheme } from "@mui/material";
 import { User } from "../../../models/user";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
@@ -11,6 +11,7 @@ import useAlertsStore from "../../../shared/alerts/alertsStore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
 import { setRowsPerPage } from "../../../state/pagination/paginationSlice";
+import { AboveBreakpoint, BelowBreakpoint, BreakpointRange } from "../../../service/responsive/breakpoints";
 
 interface UsersRawData {
     page: number;
@@ -41,6 +42,8 @@ export function UsersListPanel(props: PropsUsersListPanel) {
     const totalPages = useSelector((state: RootState) => state.pagination.totalPages);
     const usersList = useSelector((state: RootState) => state.usersList.usersList);
     const dispatch = useDispatch();
+
+    const theme = useTheme();
 
     // FUNCTIONS---------------
     const isUserSelected = (userId: string) => selectedUsersId.includes(userId);
@@ -110,15 +113,38 @@ export function UsersListPanel(props: PropsUsersListPanel) {
                                                 sx={{ borderRadius: 3, overflow: 'hidden', my: .5 }}
                                                 disablePadding
                                             >
-                                                <ListItemButton disabled={deleteUserIsLoading && selectedUsersId.includes(user.id)} onClick={() => navigate(`/user-info/${user.id}`)} selected={isUserSelected(user.id)}>
-                                                    <ListItemAvatar>
-                                                        <Avatar>
-                                                            {user.name.charAt(0).toUpperCase()}{user.surname.charAt(0).toUpperCase()}
-                                                        </Avatar>
-                                                    </ListItemAvatar>
-                                                    <ListItemText primary={`${user.name} ${user.surname}`} secondary={user.address} sx={{ width: .5 }} />
-                                                    <ListItemText secondary={user.email} />
-                                                </ListItemButton>
+                                                <AboveBreakpoint breakpoint="sm" style={{ display: 'none' }}>
+                                                    <ListItemButton disabled={deleteUserIsLoading && selectedUsersId.includes(user.id)} onClick={() => navigate(`/user-info/${user.id}`)} selected={isUserSelected(user.id)}>
+                                                        <ListItemAvatar>
+                                                            <Avatar>
+                                                                {user.name.charAt(0).toUpperCase()}{user.surname.charAt(0).toUpperCase()}
+                                                            </Avatar>
+                                                        </ListItemAvatar>
+                                                        <ListItemText primary={`${user.name} ${user.surname}`} sx={{ width: .5 }} />
+                                                    </ListItemButton>
+                                                </AboveBreakpoint>
+                                                <BelowBreakpoint breakpoint="md" style={{ display: 'none' }}>
+                                                    <ListItemButton disabled={deleteUserIsLoading && selectedUsersId.includes(user.id)} onClick={() => navigate(`/user-info/${user.id}`)} selected={isUserSelected(user.id)}>
+                                                        <ListItemAvatar>
+                                                            <Avatar>
+                                                                {user.name.charAt(0).toUpperCase()}{user.surname.charAt(0).toUpperCase()}
+                                                            </Avatar>
+                                                        </ListItemAvatar>
+                                                        <ListItemText primary={`${user.name} ${user.surname}`} secondary={user.address} sx={{ width: .5 }} />
+                                                        <ListItemText secondary={user.email} />
+                                                    </ListItemButton>
+                                                </BelowBreakpoint>
+                                                <BreakpointRange from="sm" to="md" reverse style={{ display: 'none' }}>
+                                                        <ListItemButton disabled={deleteUserIsLoading && selectedUsersId.includes(user.id)} onClick={() => navigate(`/user-info/${user.id}`)} selected={isUserSelected(user.id)}>
+                                                            <ListItemAvatar>
+                                                                <Avatar>
+                                                                    {user.name.charAt(0).toUpperCase()}{user.surname.charAt(0).toUpperCase()}
+                                                                </Avatar>
+                                                            </ListItemAvatar>
+                                                            <ListItemText primary={`${user.name} ${user.surname}`} sx={{ width: .5 }} />
+                                                            <ListItemText secondary={user.email} />
+                                                        </ListItemButton>
+                                                </BreakpointRange>
                                             </ListItem>
                                         </Collapse>
                                     ))
@@ -174,33 +200,39 @@ export function UsersListPanel(props: PropsUsersListPanel) {
             </Box>
             {
                 props.usersRawData && props.usersRawData.items.length > 0 && selectedUsersId.length == 0 &&
-                <Box sx={{ position: 'fixed', bottom: 50, left: '50%', transform: 'translate(-50%, 0)' }}>
+                <Stack alignItems={'center'} sx={{ position: 'fixed', bottom: 50, left: 0, width: 1 }}>
                     {/* PAGINATION */}
                     <Fade in={selectedUsersId.length == 0}>
                         <Paper elevation={0} sx={{ boxShadow: '0px 0px 13px 1px rgba(0,0,0,0.15)', p: 2, borderRadius: 3 }}>
-                            <Stack spacing={2} direction={'row'} alignItems={'center'}>
-                                <Typography color='textSecondary'>
-                                    {currentPage * rowsPerPage - rowsPerPage + 1}-
-                                    {Math.min((currentPage) * rowsPerPage, props.usersRawData.totalItems)}{' '}
-                                    {t('text.of')} {props.usersRawData.totalItems} {t('text.users')}
-                                </Typography>
-                                <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
-                                <Typography color='textSecondary' sx={{ borderRadius: 3 }} id="rows-label">{t('labels.rowsPerPage')}:</Typography>
-                                <Select
-                                    labelId="rows-label"
-                                    value={rowsPerPage.toString()}
-                                    label="Rows"
-                                    onChange={handleChangeRowsPerPage}
-                                >
-                                    <MenuItem value={3}>3</MenuItem>
-                                    <MenuItem value={5}>5</MenuItem>
-                                    <MenuItem value={7}>7</MenuItem>
-                                    <MenuItem value={15}>15</MenuItem>
-                                </Select>
+                            <Stack spacing={2} direction={'row'} alignItems={'center'} justifyContent={'center'}>
+                                <BelowBreakpoint breakpoint="md" style={{ display: 'none' }}>
+                                    <Typography color='textSecondary' sx={{ whiteSpace: 'noWrap', margin: 0 }}>
+                                        {currentPage * rowsPerPage - rowsPerPage + 1}-
+                                        {Math.min((currentPage) * rowsPerPage, props.usersRawData.totalItems)}{' '}
+                                        {t('text.of')} {props.usersRawData.totalItems} {t('text.users')}
+                                    </Typography>
+                                </BelowBreakpoint>
+                                <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} sx={{ margin: '0 !important' }} />
+                                <BelowBreakpoint breakpoint="md" style={{ display: 'none' }}>
+                                    <Stack direction={'row'} alignItems={'center'} spacing={2}>
+                                        <Typography color='textSecondary' sx={{ borderRadius: 3, whiteSpace: 'noWrap' }} id="rows-label">{t('labels.rowsPerPage')}:</Typography>
+                                        <Select
+                                            labelId="rows-label"
+                                            value={rowsPerPage.toString()}
+                                            label="Rows"
+                                            onChange={handleChangeRowsPerPage}
+                                        >
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                            <MenuItem value={15}>15</MenuItem>
+                                        </Select>
+                                    </Stack>
+                                </BelowBreakpoint>
                             </Stack>
                         </Paper>
                     </Fade >
-                </Box>
+                </Stack>
             }
         </>
     )

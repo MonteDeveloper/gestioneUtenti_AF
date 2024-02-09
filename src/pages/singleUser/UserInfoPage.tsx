@@ -11,6 +11,7 @@ import { useQueryClient } from "react-query";
 import useAlertsStore from "../../shared/alerts/alertsStore";
 import { useDateFns } from "../../shared/useDateFns";
 import { ModalEditUser } from "./components/ModalEditUser";
+import { BelowBreakpoint } from "../../service/responsive/breakpoints";
 
 export function UserInfoPage() {
     const { id } = useParams();
@@ -60,25 +61,34 @@ export function UserInfoPage() {
                 <Button variant="outlined" sx={{ px: 3, borderRadius: 3, py: 2 }} onClick={() => navigate('/')}>
                     <Stack direction={'row'} alignItems={'center'} spacing={1}>
                         <ArrowBackIosNewIcon sx={{ fontSize: 15, paddingBottom: .1 }} />
-                        <Box sx={{ fontSize: 15 }}>{t("buttons.userList")}</Box>
+
+                        <BelowBreakpoint breakpoint='md' style={{ display: 'none' }}>
+                            <Box sx={{ fontSize: 15 }}>{t("buttons.userList")}</Box>
+                        </BelowBreakpoint>
                     </Stack>
                 </Button>,
                 <Stack direction={'row'} spacing={2}>
-                    <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={handleClickDeleteUser} color="error">
+                    <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3, py: 2 }} onClick={handleClickDeleteUser} color="error">
                         <Stack direction={'row'} alignItems={'center'} spacing={1}>
                             <DeleteIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                             {
                                 deleteUserIsLoading ?
-                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("messages.deleting")}</Box>
+                                    <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                                        <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("messages.deleting")}</Box>
+                                    </BelowBreakpoint>
                                     :
-                                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.deleteUser")}</Box>
+                                    <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                                        <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.deleteUser")}</Box>
+                                    </BelowBreakpoint>
                             }
                         </Stack>
                     </Button>
                     <Button disabled={getUserIsLoading || deleteUserIsLoading} variant="contained" sx={{ px: 3, borderRadius: 3 }} onClick={handleClickEditUser} color="primary">
                         <Stack direction={'row'} alignItems={'center'} spacing={1}>
                             <EditIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                            <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.editUser")}</Box>
+                            <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                                <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t("buttons.editUser")}</Box>
+                            </BelowBreakpoint>
                         </Stack>
                     </Button>
                 </Stack>
@@ -102,7 +112,7 @@ export function UserInfoPage() {
                                             <Box sx={{ p: 4, borderRadius: 3 }}>
                                                 <Stack height={1} justifyContent={'center'}>
                                                     <Stack spacing={3}>
-                                                        <Stack direction={'row'} spacing={3}>
+                                                        <Stack direction={{md: 'row'}} spacing={3}>
                                                             <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3 }} primary={t("labels.birthdayDate")} secondary={formatDateView(user.birthday_date)} />
                                                             <ListItemText sx={{ whiteSpace: 'noWrap', textAlign: 'center', padding: 2, borderRadius: 3 }} primary={t("labels.address")} secondary={user.address} />
                                                         </Stack>

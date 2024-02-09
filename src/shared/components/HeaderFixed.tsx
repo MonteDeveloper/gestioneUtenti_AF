@@ -9,6 +9,7 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../../state/theme/themeSlice';
 import { RootState } from '../../state/store';
+import { AboveBreakpoint, BelowBreakpoint } from '../../service/responsive/breakpoints';
 
 interface PropsHeaderFixed {
     components: ReactElement[];
@@ -42,14 +43,23 @@ export default function HeaderFixed(props: PropsHeaderFixed) {
                     <Paper elevation={0} sx={{ boxShadow: '0px 0px 13px 1px rgba(0,0,0,0.10)', width: 1, py: 2, px: 3, borderRadius: 0 }}>
                         <Container>
                             <Stack width={1} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                                <Box>
-                                    <Typography variant="h4">
-                                        {t(`titles.${titlesPages[page]}Page`)}
-                                    </Typography>
-                                    <Typography variant="caption" color="textSecondary" gutterBottom>
-                                        {t(`subtitles.${titlesPages[page]}Page`)}
-                                    </Typography>
-                                </Box>
+                                <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                                    <Box>
+                                        <Typography variant="h4">
+                                            {t(`titles.${titlesPages[page]}Page`)}
+                                        </Typography>
+                                        <Typography variant="caption" color="textSecondary" gutterBottom>
+                                            {t(`subtitles.${titlesPages[page]}Page`)}
+                                        </Typography>
+                                    </Box>
+                                </BelowBreakpoint>
+                                <AboveBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                                    <Box>
+                                        <Typography variant="h5">
+                                            {t(`titles.${titlesPages[page]}Page`)}
+                                        </Typography>
+                                    </Box>
+                                </AboveBreakpoint>
                                 <Stack direction={'row'} spacing={2} alignItems={'center'}>
                                     <Switch
                                         checked={currentTheme === 'dark'}

@@ -10,6 +10,7 @@ import HeaderFixed from '../../shared/components/HeaderFixed';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
 import { goToPage } from '../../state/pagination/paginationSlice';
+import { BelowBreakpoint } from '../../service/responsive/breakpoints';
 
 export function UsersListPage() {
     const [searchParameter, setSearchParameter] = useState<string>('');
@@ -25,7 +26,7 @@ export function UsersListPage() {
     const navigate = useNavigate();
 
     const handleOnSearch = (searchValue: string) => setSearchParameter(searchValue);
-    const handleChangePage = (newPage: number) => dispatch(goToPage({newCurrentPage: newPage}));
+    const handleChangePage = (newPage: number) => dispatch(goToPage({ newCurrentPage: newPage }));
 
     return (
         <>
@@ -33,7 +34,11 @@ export function UsersListPage() {
                 <SearchBar onSearch={handleOnSearch} />,
                 <Button sx={{ borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15 }} variant="contained" color="primary" onClick={() => navigate('/create-user')}>
                     <AddIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                    <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>{t('buttons.newUser')}</Box>
+                    <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                        <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>
+                            {t('buttons.newUser')}
+                        </Box>
+                    </BelowBreakpoint>
                 </Button>
             ]} />
             <Container maxWidth="md">
