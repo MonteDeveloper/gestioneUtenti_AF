@@ -28,6 +28,12 @@ const fetchUsers = async (searchValue?: string) => {
   return users;
 };
 
+const fetchAllUsers = async () => {
+  const allUsers = await pb.collection('usersData').getFullList<User>();
+  console.log(allUsers);
+  return allUsers;
+}
+
 const fetchUserById = async (id: string) => {
   const user = await pb.collection('usersData').getOne<User>(id);
   return user;
@@ -53,6 +59,10 @@ const mutateEditUser = async (userId: string, editedUser: Partial<User>) => {
 // useQuery
 export function getUsers(currentPage: number, rowsPerPage: number, searchValue?: string) {
   return useQuery(['users', searchValue, currentPage, rowsPerPage], () => fetchUsers(searchValue));
+}
+
+export function getAllUsers() {
+  return useQuery(['allUsers'], () => fetchAllUsers());
 }
 
 export function getUserById(id: string) {

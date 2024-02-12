@@ -9,6 +9,10 @@ export const translation = {
         confirmEditUser: "Conferma Modifica",
         editUser: "Modifica Utente",
         close: "Chiudi",
+        week: "Settimana",
+        month: "Mese",
+        year: "Anno",
+        infoChart: "GRAFICO",
     },
     placeholders: {
         searchBar: "Cerca un utente",
@@ -31,6 +35,7 @@ export const translation = {
         userInfoPage: "Dettaglio Utente",
         newUserPage: "Nuovo Utente",
         editUserModal: "Modifica i dati e le informazioni dell'utente",
+        newUsersChart: "Grafico Nuovi Utenti",
     },
     subtitles: {
         userListPage: "Elenca tutti gli utenti disponibili",

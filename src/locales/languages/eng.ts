@@ -9,6 +9,10 @@ export const translation = {
         confirmEditUser: "Confirm Edit",
         editUser: "Edit User",
         closeButton: "Close",
+        week: "Week",
+        month: "Month",
+        year: "Year",
+        infoChart: "CHART",
     },
     placeholders: {
         searchBar: "Search for a user",
@@ -31,6 +35,7 @@ export const translation = {
         userInfoPage: "User Details",
         newUserPage: "New User",
         editUserModal: "Edit User Information and Details",
+        newUsersChart: "New Users Chart",
     },
     subtitles: {
         userListPage: "List all available users",
