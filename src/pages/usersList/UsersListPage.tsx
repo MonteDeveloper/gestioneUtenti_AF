@@ -41,14 +41,14 @@ export function UsersListPage() {
             <HeaderFixed components={[
                 <SearchBar onSearch={handleOnSearch} />,
                 <Stack direction='row' spacing={2}>
-                    <Button sx={{ borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15 }} variant="contained" color="primary" onClick={handleClickInfoChart}>
-                        <BarChartIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
-                        <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>
+                    <BelowBreakpoint breakpoint='md' style={{ display: 'none' }}>
+                        <Button sx={{ borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15 }} variant="contained" color="primary" onClick={handleClickInfoChart}>
+                            <BarChartIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                             <Box sx={{ fontSize: 15, whiteSpace: 'noWrap' }}>
                                 {t('buttons.infoChart')}
                             </Box>
-                        </BelowBreakpoint>
-                    </Button>
+                        </Button>
+                    </BelowBreakpoint>
                     <Button sx={{ borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, fontSize: 15 }} variant="contained" color="primary" onClick={() => navigate('/create-user')}>
                         <AddIcon sx={{ fontSize: 20, paddingBottom: .2, whiteSpace: 'noWrap' }} />
                         <BelowBreakpoint breakpoint='sm' style={{ display: 'none' }}>

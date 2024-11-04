@@ -8,6 +8,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { getCurrentLocale } from '../../../locales/i18n';
 import { toCapitalize } from '../../../shared/utility';
+import { BelowBreakpoint } from '../../../service/responsive/breakpoints';
 
 interface PropsModalChartsUsers {
     setIsModalOpen: (isOpen: boolean) => void;
@@ -46,7 +47,7 @@ export function ModalChartsUsers(props: PropsModalChartsUsers) {
     };
 
     const handleNext = () => {
-        if(canNextDate()){
+        if (canNextDate()) {
             let nextDate;
             switch (viewMode) {
                 case 'weekly':
@@ -61,7 +62,7 @@ export function ModalChartsUsers(props: PropsModalChartsUsers) {
                 default:
                     throw new Error('Modalità non valida.');
             }
-    
+
             setSelectedDate(nextDate);
         }
     };
@@ -74,7 +75,7 @@ export function ModalChartsUsers(props: PropsModalChartsUsers) {
         const today = new Date();
         let todayStartMode;
         let nextDate;
-        
+
         switch (viewMode) {
             case 'weekly':
                 nextDate = addWeeks(startOfWeek(selectedDate, { weekStartsOn: 1 }), 1);
@@ -91,11 +92,11 @@ export function ModalChartsUsers(props: PropsModalChartsUsers) {
             default:
                 throw new Error('Modalità non valida.');
         }
-    
+
         return !isAfter(nextDate, todayStartMode);
     };
-    
-    
+
+
 
     const handleChangeViewMode = (
         event: React.MouseEvent<HTMLElement>,
@@ -228,73 +229,74 @@ export function ModalChartsUsers(props: PropsModalChartsUsers) {
 
     return (
         <>
-            <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
-            <Modal
-                open={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                aria-labelledby="modal-edit-user"
-                aria-describedby="modal-edit-user-description"
-            >
-                <Paper elevation={0} sx={{ p: 4, borderRadius: 3, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', }}>
-                    <Stack spacing={4} alignItems={'center'}>
-                        <Typography variant='h4'>{t('titles.newUsersChart')}</Typography>
-                        <Stack spacing={1} alignItems={'center'}>
-                            <Stack direction={'row'} spacing={2} justifyContent={'center'}>
-                                <ToggleButtonGroup
-                                    value={viewMode}
-                                    exclusive
-                                    onChange={handleChangeViewMode}
-                                    aria-label="text alignment"
-                                >
-                                    <ToggleButton value="weekly">
-                                        {t('buttons.week')}
-                                    </ToggleButton>
-                                    <ToggleButton value="monthly">
-                                        {t('buttons.month')}
-                                    </ToggleButton>
-                                    <ToggleButton value="yearly">
-                                        {t('buttons.year')}
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Stack>
-                            {
-                                chartData && allUsers &&
+            <BelowBreakpoint breakpoint='md' style={{ display: 'none' }}>
+                <Modal
+                    open={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    aria-labelledby="modal-edit-user"
+                    aria-describedby="modal-edit-user-description"
+                >
+                    <Paper elevation={0} sx={{ p: 4, borderRadius: 3, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', }}>
+                        <Stack spacing={4} alignItems={'center'}>
+                            <Typography variant='h4'>{t('titles.newUsersChart')}</Typography>
+                            <Stack spacing={1} alignItems={'center'}>
+                                <Stack direction={'row'} spacing={2} justifyContent={'center'}>
+                                    <ToggleButtonGroup
+                                        value={viewMode}
+                                        exclusive
+                                        onChange={handleChangeViewMode}
+                                        aria-label="text alignment"
+                                    >
+                                        <ToggleButton value="weekly">
+                                            {t('buttons.week')}
+                                        </ToggleButton>
+                                        <ToggleButton value="monthly">
+                                            {t('buttons.month')}
+                                        </ToggleButton>
+                                        <ToggleButton value="yearly">
+                                            {t('buttons.year')}
+                                        </ToggleButton>
+                                    </ToggleButtonGroup>
+                                </Stack>
+                                {
+                                    chartData && allUsers &&
 
-                                <LineChart
-                                    xAxis={[{
-                                        scaleType: 'point',
-                                        data: chartData.xAxisData
-                                    }]}
-                                    series={[{
-                                        data: chartData.seriesData
-                                    }]}
-                                    width={viewMode === 'weekly' ? 500 : 900}
-                                    height={300}
-                                />
-                                //FAKE DATA TESTING------------------------------------
-                                // <LineChart
-                                //     xAxis={[{
-                                //         scaleType: 'point',
-                                //         data: Array.from({ length: 31 }, (_, index) => (index + 1).toString()), 
-                                //         label: 'Gennaio 2024' 
-                                //     }]}
-                                //     series={[{
-                                //         data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 30)), 
-                                //         label: "Nuovi Utenti"
-                                //     }]}
-                                //     width={1000} 
-                                //     height={400}
-                                // />
-                            }
-                            <Stack direction={'row'} spacing={1} justifyContent={'center'} alignItems={'center'}>
-                                <Button disabled={!canPreviousDate()} onClick={handlePrevious}><ArrowLeftIcon /></Button>
-                                <Typography>{getLabel()}</Typography>
-                                <Button disabled={!canNextDate()} onClick={handleNext}><ArrowRightIcon /></Button>
+                                    <LineChart
+                                        xAxis={[{
+                                            scaleType: 'point',
+                                            data: chartData.xAxisData
+                                        }]}
+                                        series={[{
+                                            data: chartData.seriesData
+                                        }]}
+                                        width={viewMode === 'weekly' ? 500 : 900}
+                                        height={300}
+                                    />
+                                    //FAKE DATA TESTING------------------------------------
+                                    // <LineChart
+                                    //     xAxis={[{
+                                    //         scaleType: 'point',
+                                    //         data: Array.from({ length: 31 }, (_, index) => (index + 1).toString()), 
+                                    //         label: 'Gennaio 2024' 
+                                    //     }]}
+                                    //     series={[{
+                                    //         data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 30)), 
+                                    //         label: "Nuovi Utenti"
+                                    //     }]}
+                                    //     width={1000} 
+                                    //     height={400}
+                                    // />
+                                }
+                                <Stack direction={'row'} spacing={1} justifyContent={'center'} alignItems={'center'}>
+                                    <Button disabled={!canPreviousDate()} onClick={handlePrevious}><ArrowLeftIcon /></Button>
+                                    <Typography>{getLabel()}</Typography>
+                                    <Button disabled={!canNextDate()} onClick={handleNext}><ArrowRightIcon /></Button>
+                                </Stack>
                             </Stack>
                         </Stack>
-                    </Stack>
-                </Paper>
-            </Modal>
+                    </Paper>
+                </Modal>
+            </BelowBreakpoint>
         </>
     )
 }
